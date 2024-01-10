@@ -9,11 +9,23 @@
 
     <!-- PyScript CSS -->
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    <!-- CSS for examples -->
+    <!-- page CSS -->
     <link rel="stylesheet" href="./index.css" />
 
     <!-- This script tag bootstraps PyScript -->
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <!-- include CodeMirror for code text input, autocompletion and highlighting  -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js"></script>
+
+    <!-- styling change as needed -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css">
 
     <!-- for splashscreen -->
     <style>
@@ -29,8 +41,9 @@
         loading.showModal();
     </script>
 
-    <title>PyScript Hello World</title>
-    <!-- <link rel="icon" type="image/png" href="./assets/favicon.png" /> -->
+    <title>Visualgo - Visualise Data Structure</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩🏻‍💻</text></svg>">
 </head>
 
 <body>
@@ -38,25 +51,40 @@
         <h1>Loading...</h1>
     </dialog>
 
-    <nav class="navbar" style="background-color: #000000">
-        <div class="app-header">
-            <a href="/">
-                <!-- <img src="./assets/logo.png" class="logo" /> -->
-            </a>
-            <a class="title" href="" style="color: #f0ab3c">Hello World</a>
-        </div>
-    </nav>
-
     <section class="pyscript">
-        Hello world! <br />
-        This is the current date and time, as computed by Python:
-        <script type="py">
-                from pyscript import display
-                from datetime import datetime
-                now = datetime.now()
-                display(now.strftime("%m/%d/%Y, %H:%M:%S"))
-            </script>
+        <nav class="container" id="executionSection">
+            <div class="container-vertical">
+                <button id="importFileButton" onclick="importFile()">Import File</button>
+                <button id="saveFileButton" onclick="saveFile()">Save File</button>
+            </div>
+            <button id="selectFunctionsButton" py-click="selectFunctions"> Select Functions <br>
+                Calls
+                to track</button>
+            <button id="selectVariablesButton" py-click="selectVariables">Select Variables <br>to
+                show</button>
+            <button id="restartButton" py-click="start"> Start </button>
+            <button id="pauseButton" py-click="pause"> Pause </button>
+            <input type="text" id="stepInput" placeholder="500 (Steps in ms)"
+                oninput="updateInputValue(this)" max="10000" />
+            <div class="container-vertical">
+                <button id="stepBackwardButton" py-click="stepBackward">Step Backward</button>
+                <button id="nextBackwardButton" py-click="nextStepBackward">Next Backward</button>
+            </div>
+            <div class="container-vertical">
+                <button id="stepForwardButton" py-click="stepForward">Step Forward</button>
+                <button id="nextForwardButton" py-click="nextStepForward">Next Forward</button>
+            </div>
+        </nav>
+
+        <textarea id="codeEditor" placeholder="Type your Python code here..."></textarea>
+
+        <div id="drawingArea">Drawing Area</div>
+
     </section>
+
+    <script src="index.js"></script>
+
+    <script type="py" src="./main.py" config="./pyscript.json"></script>
 </body>
 
 </html>
