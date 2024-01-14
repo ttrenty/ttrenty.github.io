@@ -2,7 +2,9 @@
 var editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
     mode: 'python', // Set the mode to Python
     lineNumbers: true, // Display line numbers
-    indentUnit: 4, // Set the number of spaces for each indent
+    scrollbarStyle: 'null', // Hide the scrollbars
+    // indentUnit: 4, // Set the number of spaces for each indent
+    position: 'absolute',
     extraKeys: {
         'Ctrl-Space': 'autocomplete' // Enable autocomplete on Ctrl + Space
     },
@@ -55,7 +57,7 @@ function saveFile() {
     // Get the content from the CodeMirror editor
     var content = editor.getValue();
     if (content == '') {
-        // alert('Please enter some code to save.');
+        alert('Please enter some code to save.');
         return;
     }
 
@@ -69,7 +71,7 @@ function saveFile() {
     a.href = URL.createObjectURL(blob);
 
     // Set the download attribute with the desired file name and extension
-    a.download = 'filename.py';
+    a.download = 'visualgo.py';
 
     // Append the anchor element to the body
     document.body.appendChild(a);
@@ -98,27 +100,6 @@ function validateNumberInput(value) {
     return Math.min(parsedValue, maxValue).toString();
 }
 
-function updateInputValue(input) {
+function checkTimeStepValue(input) {
     input.value = validateNumberInput(input.value);
-}
-
-function pause() {
-    let element = document.getElementById("pauseButton");
-    if (element.innerText == "Pause") {
-        element.innerText = "Resume";
-    } else {
-        element.innerText = "Pause";
-    }
-}
-
-function start() {
-    let element = document.getElementById("restartButton");
-    if (element.innerText == "Start") {
-        element.innerText = "Restart";
-    } else {
-        element.innerText = "Start";
-    }
-}
-function executeCode() {
-    alert("Executing Python code:\n" + document.getElementById('codeEditor').value);
 }
