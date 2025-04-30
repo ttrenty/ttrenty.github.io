@@ -16,16 +16,12 @@
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
     <!-- include CodeMirror for code text input, autocompletion and highlighting  -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/python/python.min.js"></script>
 
     <!-- styling change as needed -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/dracula.min.css">
 
     <!-- for splashscreen -->
     <style>
@@ -64,8 +60,8 @@
                 show</button>
             <button id="startButton" py-click="start"> Start </button>
             <button id="pauseButton" py-click="pause"> Pause </button>
-            <input type="text" id="stepInput" placeholder="1000 (Steps in ms)"
-                oninput="checkTimeStepValue(this)" max="10000" />
+            <input type="text" id="stepInput" placeholder="1000 (Steps in ms)" oninput="checkTimeStepValue(this)"
+                max="10000" />
             <div class="container-vertical">
                 <button id="stepBackwardButton" py-click="stepBackward">Step Backward</button>
                 <button id="nextBackwardButton" py-click="nextBackward">Next Backward</button>
@@ -80,6 +76,13 @@
         </div>
 
         <div id="drawingArea">
+            <p style="text-align: center; margin: 10px 0;">
+                Try the newest version at:
+                <a href="https://pfa-visualgo.github.io/Visualgo/ui/index.html" target="_blank"
+                    rel="noopener noreferrer">
+                    https://pfa-visualgo.github.io/Visualgo/ui/index.html
+                </a>
+            </p>
             Drawing Area
         </div>
 
