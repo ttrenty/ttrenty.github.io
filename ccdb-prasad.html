@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Use with pandoc CCDB_prasad_Tutorial.md -o CCDB_prasad_Tutorial.html --standalone --template=template.html --metadata title="CCDB Tutorial"  -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -131,149 +133,135 @@
     </div>
 
     <div class="markdown-body">
-        <h1 id="running-jobs-on-digital-research-alliance-of-canada-hpc-clusters"><strong>Running
-                Jobs on Digital Research Alliance of Canada HPC
-                Clusters</strong></h1>
+        <h1
+        id="running-jobs-on-digital-research-alliance-of-canada-hpc-clusters"><strong>Running
+        Jobs on Digital Research Alliance of Canada HPC
+        Clusters</strong></h1>
         <p>This guide provides instructions for University of Calgary
-            users, particularly those associated with the Viki group
-            (<code>vdr-502-05</code>), on how to set up an account and run
-            computational jobs on the High-Performance Computing (HPC)
-            clusters provided by the Digital Research Alliance of Canada
-            (the Alliance, formerly Compute Canada).</p>
+        users, particularly those associated with the Viki group
+        (<code>vdr-502-05</code>), on how to set up an account and run
+        computational jobs on the High-Performance Computing (HPC)
+        clusters provided by the Digital Research Alliance of Canada
+        (the Alliance, formerly Compute Canada).</p>
         <p>Please report issues on Discord.</p>
         <h2 id="i.-account-creation-and-configuration">I. Account
-            Creation and Configuration</h2>
+        Creation and Configuration</h2>
         <ol type="1">
-            <li><strong>Create an Alliance Account:</strong>
-                <ul>
-                    <li>Go to the <a href="https://ccdb.alliancecan.ca/account_application">account
-                            application page</a>.</li>
-                    <li>Use your University of Calgary email address (e.g.,
-                        <code>@ucalgary.ca</code>).
-                    </li>
-                    <li>In the ‘Sponsor’ field, enter the PI code provided by Viki:
-                        <code>vdr-502-05</code>.
-                    </li>
-                    <li>Submit the application and wait for sponsor approval (from
-                        Viki) followed by validation from the Alliance staff.</li>
-                </ul>
-            </li>
-            <li><strong>Enable Two-Factor Authentication (2FA):</strong>
-                <ul>
-                    <li>Set up Duo Mobile for 2FA following the instructions <a
-                            href="https://ccdb.alliancecan.ca/multi_factor_authentications">here</a>.
-                        This is required to log in to the clusters.</li>
-                </ul>
-            </li>
-            <li><strong>Confirm Cluster Access:</strong>
-                <ul>
-                    <li>Once your account is active, check your resource allocations
-                        <a href="https://ccdb.alliancecan.ca/me/allocations">here</a>.
-                        You should have access to the resources associated with your
-                        sponsor’s allocation.
-                    </li>
-                    <li>The primary general-purpose clusters recommended for use
-                        are:
-                        <ul>
-                            <li><a href="https://docs.alliancecan.ca/wiki/Narval">Narval</a></li>
-                            <li><a href="https://docs.alliancecan.ca/wiki/B%C3%A9luga">Beluga</a></li>
-                            <li><a href="https://docs.alliancecan.ca/wiki/Cedar">Cedar</a></li>
-                        </ul>
-                    </li>
-                    <li><strong>Note:</strong> <a href="https://docs.alliancecan.ca/wiki/Niagara">Niagara</a> is a
-                        specialized large-scale cluster. Access requires a separate <a
-                            href="https://ccdb.alliancecan.ca/services/opt_in">opt-in
-                            application</a>. It also offers a web portal called ‘<a
-                            href="https://ondemand.scinet.utoronto.ca/pun/sys/dashboard/">OnDemand</a>’
-                        for simplified job management.</li>
-                    <li><strong>Retired Cluster:</strong> Do not use <a
-                            href="https://docs.alliancecan.ca/wiki/Graham">Graham</a>, as it
-                        is being decommissioned.</li>
-                    <li><strong>Check Status:</strong> Always check the <a
-                            href="https://status.alliancecan.ca/">Alliance status page</a>
-                        for planned maintenance or unexpected outages before starting
-                        work.</li>
-                </ul>
-            </li>
-            <li><strong>Connect via SSH:</strong>
-                <ul>
-                    <li>
-                        <p>Connect to your chosen cluster’s login node using SSH.
-                            Find the specific hostname on the cluster’s documentation page
-                            (linked above). For example, for Narval:</p>
-                        <div class="sourceCode" id="cb1">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>your_alliance_username<span class="op">&gt;</span>@narval.alliancecan.ca</span></code></pre>
-                        </div>
-                    </li>
-                    <li>
-                        <p>Follow the prompts, which will include authenticating
-                            with your password and Duo 2FA.</p>
-                    </li>
-                    <li>
-                        <p><strong>Recommendation (Easier Logins):</strong> Set up
-                            SSH keys for passwordless login (you will still need Duo).</p>
-                        <ul>
-                            <li>Generate a key pair on your local machine: <a
-                                    href="https://docs.alliancecan.ca/wiki/Generating_SSH_keys_in_Windows">Windows
-                                    Guide</a> | <a
-                                    href="https://docs.alliancecan.ca/wiki/Using_SSH_keys_in_Linux">Linux/macOS/WSL
-                                    Guide</a>.</li>
-                            <li>Copy the content of your <strong>public key</strong> file
-                                (e.g., <code>id_rsa.pub</code> or
-                                <code>id_ed25519.pub</code>).
-                            </li>
-                            <li>Paste the public key into the <a
-                                    href="https://ccdb.alliancecan.ca/ssh_authorized_keys">SSH
-                                    Authorized Keys section</a> on the CCDB website. This allows the
-                                key to be used across all Alliance clusters.</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+        <li><strong>Create an Alliance Account:</strong>
+        <ul>
+        <li>Go to the <a
+        href="https://ccdb.alliancecan.ca/account_application">account
+        application page</a>.</li>
+        <li>Use your University of Calgary email address (e.g.,
+        <code>@ucalgary.ca</code>).</li>
+        <li>In the ‘Sponsor’ field, enter the PI code provided by Viki:
+        <code>vdr-502-05</code>.</li>
+        <li>Submit the application and wait for sponsor approval (from
+        Viki) followed by validation from the Alliance staff.</li>
+        </ul></li>
+        <li><strong>Enable Two-Factor Authentication (2FA):</strong>
+        <ul>
+        <li>Set up Duo Mobile for 2FA following the instructions <a
+        href="https://ccdb.alliancecan.ca/multi_factor_authentications">here</a>.
+        This is required to log in to the clusters.</li>
+        </ul></li>
+        <li><strong>Confirm Cluster Access:</strong>
+        <ul>
+        <li>Once your account is active, check your resource allocations
+        <a href="https://ccdb.alliancecan.ca/me/allocations">here</a>.
+        You should have access to the resources associated with your
+        sponsor’s allocation.</li>
+        <li>The primary general-purpose unlimited access clusters
+        recommended for use are:
+        <ul>
+        <li><a
+        href="https://docs.alliancecan.ca/wiki/Narval">Narval</a></li>
+        <li><a
+        href="https://docs.alliancecan.ca/wiki/B%C3%A9luga">Beluga</a></li>
+        <li><a
+        href="https://docs.alliancecan.ca/wiki/Cedar">Cedar</a></li>
+        </ul></li>
+        <li><strong>Note:</strong> <a
+        href="https://docs.alliancecan.ca/wiki/Niagara">Niagara</a> is a
+        specialized large-scale cluster. Access requires a separate <a
+        href="https://ccdb.alliancecan.ca/services/opt_in">opt-in
+        application</a>. It also offers a web portal called ‘<a
+        href="https://ondemand.scinet.utoronto.ca/pun/sys/dashboard/">OnDemand</a>’
+        for simplified job management.</li>
+        <li><strong>Retired Cluster:</strong> Do not use <a
+        href="https://docs.alliancecan.ca/wiki/Graham">Graham</a>, as it
+        is being decommissioned.</li>
+        <li><strong>Priority Access Cluster:</strong> When available,
+        you will be able to use the “rrg-vikikrpd” account to access a
+        special cluster with priority computing access.</li>
+        <li><strong>Check Status:</strong> Always check the <a
+        href="https://status.alliancecan.ca/">Alliance status page</a>
+        for planned maintenance or unexpected outages before starting
+        work.</li>
+        </ul></li>
+        <li><strong>Connect via SSH:</strong>
+        <ul>
+        <li><p>Connect to your chosen cluster’s login node using SSH.
+        Find the specific hostname on the cluster’s documentation page
+        (linked above). For example, for Narval:</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>your_alliance_username<span class="op">&gt;</span>@narval.alliancecan.ca</span></code></pre></div></li>
+        <li><p>Follow the prompts, which will include authenticating
+        with your password and Duo 2FA.</p></li>
+        <li><p><strong>Recommendation (Easier Logins):</strong> Set up
+        SSH keys for passwordless login (you will still need Duo).</p>
+        <ul>
+        <li>Generate a key pair on your local machine: <a
+        href="https://docs.alliancecan.ca/wiki/Generating_SSH_keys_in_Windows">Windows
+        Guide</a> | <a
+        href="https://docs.alliancecan.ca/wiki/Using_SSH_keys_in_Linux">Linux/macOS/WSL
+        Guide</a>.</li>
+        <li>Copy the content of your <strong>public key</strong> file
+        (e.g., <code>id_rsa.pub</code> or
+        <code>id_ed25519.pub</code>).</li>
+        <li>Paste the public key into the <a
+        href="https://ccdb.alliancecan.ca/ssh_authorized_keys">SSH
+        Authorized Keys section</a> on the CCDB website. This allows the
+        key to be used across all Alliance clusters.</li>
+        </ul></li>
+        </ul></li>
         </ol>
         <h2 id="ii.-preparing-and-submitting-a-job">II. Preparing and
-            Submitting a Job</h2>
+        Submitting a Job</h2>
         <ol start="5" type="1">
-            <li><strong>Understand Job Scripts:</strong>
-                <ul>
-                    <li>A “job” is defined by a shell script (e.g., Bash) submitted
-                        to the cluster’s workload manager, called
-                        <strong>SLURM</strong>.
-                    </li>
-                    <li>This script contains special comment lines starting with
-                        <code>#SBATCH</code>. These are directives for SLURM, specifying
-                        required resources (CPU cores, memory, wall time), account
-                        information, and other job parameters. See <a
-                            href="https://docs.alliancecan.ca/wiki/Running_jobs">Running
-                            Jobs</a> for details.
-                    </li>
-                    <li>The rest of the script contains the commands needed to run
-                        your actual computation (e.g., loading software, running
-                        code).</li>
-                    <li>Conventionally, these scripts are often saved with a
-                        <code>.sh</code> or <code>.sub</code> extension.
-                    </li>
-                </ul>
-            </li>
-            <li><strong>Example Job Script (<code>.sh</code> or
-                    <code>.sub</code> file):</strong>
-                <ul>
-                    <li><strong>Important:</strong> Carefully estimate resource
-                        requests (<code>-n</code>, <code>--mem-per-cpu</code>,
-                        <code>--time</code>). Overestimating can significantly delay
-                        your job’s start time or lead to inefficient resource use.
-                        Underestimating can cause your job to fail.
-                    </li>
-                    <li><strong>Paths:</strong> Ensure any specified paths for
-                        error/output files exist <em>before</em> submitting the job, or
-                        use commands like <code>mkdir -p</code> within the script to
-                        create them. Use absolute paths or paths relative to where you
-                        submit the job from.</li>
-                </ul>
-                <div class="sourceCode" id="cb2">
-                    <pre
-                        class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+        <li><strong>Understand Job Scripts:</strong>
+        <ul>
+        <li>A “job” is defined by a shell script (e.g., Bash) submitted
+        to the cluster’s workload manager, called
+        <strong>SLURM</strong>.</li>
+        <li>This script contains special comment lines starting with
+        <code>#SBATCH</code>. These are directives for SLURM, specifying
+        required resources (CPU cores, memory, wall time), account
+        information, and other job parameters. See <a
+        href="https://docs.alliancecan.ca/wiki/Running_jobs">Running
+        Jobs</a> for details.</li>
+        <li>The rest of the script contains the commands needed to run
+        your actual computation (e.g., loading software, running
+        code).</li>
+        <li>Conventionally, these scripts are often saved with a
+        <code>.sh</code> or <code>.sub</code> extension.</li>
+        </ul></li>
+        <li><strong>Example Job Script (<code>.sh</code> or
+        <code>.sub</code> file):</strong>
+        <ul>
+        <li><strong>Important:</strong> Carefully estimate resource
+        requests (<code>-n</code>, <code>--mem-per-cpu</code>,
+        <code>--time</code>). Overestimating can significantly delay
+        your job’s start time or lead to inefficient resource use.
+        Underestimating can cause your job to fail.</li>
+        <li><strong>Paths:</strong> Ensure any specified paths for
+        error/output files exist <em>before</em> submitting the job, or
+        use commands like <code>mkdir -p</code> within the script to
+        create them. Use absolute paths or paths relative to where you
+        submit the job from.</li>
+        </ul>
+        <div class="sourceCode" id="cb2"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-vikikrpd  # Specify the allocation account (check your allocations on CCDB)</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -N 1                    # Number of compute nodes requested</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -n 4                    # Number of CPU cores requested (adjust as needed)</span></span>
@@ -314,247 +302,182 @@
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># cp $SLURM_TMPDIR/some_temp_output.dat /path/to/your/project/results/</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job finished at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$EXIT_CODE</span></span></code></pre>
-                </div>
-            </li>
-            <li><strong>Transfer Files to the Cluster:</strong>
-                <ul>
-                    <li>
-                        <p>Organize your code, scripts, and any necessary input data
-                            locally.</p>
-                    </li>
-                    <li>
-                        <p>Use <code>scp</code> or <code>rsync</code> to transfer
-                            files to your <strong>home directory</strong> (<code>~</code> or
-                            <code>/path/to/&lt;username&gt;</code>) on the cluster’s login
-                            node. For large transfers, use the cluster’s dedicated
-                            <strong>Data Transfer Node (DTN)</strong> - find its hostname in
-                            the cluster documentation.
-                        </p>
-                        <ul>
-                            <li><strong>Example using <code>scp</code> to home
-                                    directory:</strong></li>
-                        </ul>
-                        <div class="sourceCode" id="cb3">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a single file</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$EXIT_CODE</span></span></code></pre></div></li>
+        <li><strong>Transfer Files to the Cluster:</strong>
+        <ul>
+        <li><p>Organize your code, scripts, and any necessary input data
+        locally.</p></li>
+        <li><p>Use <code>scp</code> or <code>rsync</code> to transfer
+        files to your <strong>home directory</strong> (<code>~</code> or
+        <code>/path/to/&lt;username&gt;</code>) on the cluster’s login
+        node. For large transfers, use the cluster’s dedicated
+        <strong>Data Transfer Node (DTN)</strong> - find its hostname in
+        the cluster documentation.</p>
+        <ul>
+        <li><strong>Example using <code>scp</code> to home
+        directory:</strong></li>
+        </ul>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a single file</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> local_file.txt <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:<span class="op">&lt;</span>destination_path<span class="op">&gt;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># e.g., scp my_script.py user@narval.alliancecan.ca:~/project_dir/</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a whole directory recursively</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> local_directory <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/project_dir/</span></code></pre>
-                        </div>
-                        <ul>
-                            <li><strong>Example using <code>rsync</code> (often more
-                                    efficient for directories):</strong></li>
-                        </ul>
-                        <div class="sourceCode" id="cb4">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync local_directory to remote project_dir, excluding certain patterns</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;__pycache__/&#39;</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;*.tmp&#39;</span> local_directory/ <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/project_dir/</span></code></pre>
-                        </div>
-                    </li>
-                    <li>
-                        <p><strong>Compressing large transfers:</strong> For very
-                            large directories, consider creating a compressed archive
-                            (<code>.tar.gz</code>) locally first, transferring the single
-                            archive file, and then decompressing it on the cluster.</p>
-                        <div class="sourceCode" id="cb5">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locally: Create compressed archive</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> local_directory <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/project_dir/</span></code></pre></div>
+        <ul>
+        <li><strong>Example using <code>rsync</code> (often more
+        efficient for directories):</strong></li>
+        </ul>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync local_directory to remote project_dir, excluding certain patterns</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;__pycache__/&#39;</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;*.tmp&#39;</span> local_directory/ <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/project_dir/</span></code></pre></div></li>
+        <li><p><strong>Compressing large transfers:</strong> For very
+        large directories, consider creating a compressed archive
+        (<code>.tar.gz</code>) locally first, transferring the single
+        archive file, and then decompressing it on the cluster.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locally: Create compressed archive</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> project_archive.tar.gz local_directory/</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Transfer using scp or rsync</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> project_archive.tar.gz <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># On the cluster (after SSHing in): Decompress</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> project_archive.tar.gz</span></code></pre>
-                        </div>
-                        <ul>
-                            <li>
-                                <p>For potentially better compression ratios on large files
-                                    (at the cost of time), consider <code>xz</code>:</p>
-                                <div class="sourceCode" id="cb6">
-                                    <pre
-                                        class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compress (uses all available cores): tar cf - local_directory | xz -T0 -z - &gt; project_archive.tar.xz</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Decompress (uses all available cores): xz -T0 -d -c project_archive.tar.xz | tar xf -</span></span></code></pre>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p><strong>Storage Locations:</strong> Once files are on the
-                            cluster (in your home directory), move or copy them to
-                            appropriate storage locations like <code>/project</code> or
-                            <code>/scratch</code> depending on your needs and group
-                            policies.
-                        </p>
-                    </li>
-                    <li>
-                        <p><strong>Warning:</strong> Be aware of the <a
-                                href="https://docs.alliancecan.ca/wiki/Scratch_purging_policy">Scratch
-                                Purging Policy</a>. Files in <code>/scratch</code> may be
-                            automatically deleted after a certain period.
-                            <code>/project</code> space is generally preferred for long-term
-                            storage related to specific allocations. Check your available
-                            space with the <code>quota</code> command.
-                        </p>
-                    </li>
-                </ul>
-            </li>
-            <li><strong>Manage Software Dependencies:</strong>
-                <ul>
-                    <li><strong>Modules:</strong> The simplest way is using
-                        pre-installed software via the <code>module</code> system (as
-                        shown in the example script). Use
-                        <code>module avail &lt;software_name&gt;</code> to search and
-                        <code>module load &lt;module_name&gt;</code> to load.
-                    </li>
-                    <li><strong>Python <code>venv</code>:</strong> Recommended for
-                        Python projects. Create a virtual environment (ideally within
-                        your job script in <code>$SLURM_TMPDIR</code> for performance,
-                        or in your <code>/project</code> or <code>/home</code> space).
-                        Install packages using <code>pip</code>. Use
-                        <code>--no-index</code> with <code>pip</code> if you have
-                        pre-downloaded package wheels available in a central location
-                        (see Alliance Python docs).
-                    </li>
-                    <li><strong>Apptainer:</strong> For complex dependencies using
-                        conda or ensuring reproducibility. You build a container image
-                        (often from a Dockerfile, converted to Apptainer format
-                        <em>.sif</em>) locally, transfer the <code>.sif</code> file, and
-                        run your job inside the container.
-                        <ul>
-                            <li><a
-                                    href="https://apptainer.org/docs/admin/main/installation.html#install-ubuntu-packages">Install
-                                    Apptainer</a></li>
-                            <li><a
-                                    href="https://docs.alliancecan.ca/wiki/Apptainer#Creating_an_Apptainer_container_from_a_Dockerfile">Creating
-                                    Apptainer containers from Dockerfiles</a> (Note:
-                                <code>docker build</code> cannot be run on Alliance
-                                login/compute nodes).
-                            </li>
-                            <li><a
-                                    href="https://docs.alliancecan.ca/wiki/Apptainer#Running_programs_within_a_container">Running
-                                    programs within a container</a>.</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><strong>Submit the Job:</strong>
-                <ul>
-                    <li>
-                        <p>Log in to the cluster via SSH.</p>
-                    </li>
-                    <li>
-                        <p>Navigate to the directory containing your job script
-                            (<code>.sh</code> or <code>.sub</code> file).</p>
-                    </li>
-                    <li>
-                        <p>Submit the job using <code>sbatch</code>:</p>
-                        <div class="sourceCode" id="cb7">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> your_job_script.sh</span></code></pre>
-                        </div>
-                    </li>
-                    <li>
-                        <p>SLURM will respond with a Job ID number if the submission
-                            is successful.</p>
-                    </li>
-                    <li>
-                        <p><strong>Submitting multiple jobs:</strong> If you have
-                            many similar job scripts (e.g., <code>job1.sub</code>,
-                            <code>job2.sub</code>, …) in a directory, you can submit them
-                            all carefully using <code>find</code>:
-                        </p>
-                        <div class="sourceCode" id="cb8">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Be cautious with this command - ensure it targets only the intended files</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-maxdepth</span> 1 <span class="at">-name</span> <span class="st">&quot;*.sub&quot;</span> <span class="at">-exec</span> sbatch {} <span class="dt">\;</span></span></code></pre>
-                        </div>
-                    </li>
-                </ul>
-            </li>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> project_archive.tar.gz</span></code></pre></div>
+        <ul>
+        <li><p>For potentially better compression ratios on large files
+        (at the cost of time), consider <code>xz</code>:</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compress (uses all available cores): tar cf - local_directory | xz -T0 -z - &gt; project_archive.tar.xz</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Decompress (uses all available cores): xz -T0 -d -c project_archive.tar.xz | tar xf -</span></span></code></pre></div></li>
+        </ul></li>
+        <li><p><strong>Storage Locations:</strong> Once files are on the
+        cluster (in your home directory), move or copy them to
+        appropriate storage locations like <code>/project</code> or
+        <code>/scratch</code> depending on your needs and group
+        policies.</p></li>
+        <li><p><strong>Warning:</strong> Be aware of the <a
+        href="https://docs.alliancecan.ca/wiki/Scratch_purging_policy">Scratch
+        Purging Policy</a>. Files in <code>/scratch</code> may be
+        automatically deleted after a certain period.
+        <code>/project</code> space is generally preferred for long-term
+        storage related to specific allocations. Check your available
+        space with the <code>quota</code> command.</p></li>
+        </ul></li>
+        <li><strong>Manage Software Dependencies:</strong>
+        <ul>
+        <li><strong>Modules:</strong> The simplest way is using
+        pre-installed software via the <code>module</code> system (as
+        shown in the example script). Use
+        <code>module avail &lt;software_name&gt;</code> to search and
+        <code>module load &lt;module_name&gt;</code> to load.</li>
+        <li><strong>Python <code>venv</code>:</strong> Recommended for
+        Python projects. Create a virtual environment (ideally within
+        your job script in <code>$SLURM_TMPDIR</code> for performance,
+        or in your <code>/project</code> or <code>/home</code> space).
+        Install packages using <code>pip</code>. Use
+        <code>--no-index</code> with <code>pip</code> if you have
+        pre-downloaded package wheels available in a central location
+        (see Alliance Python docs).</li>
+        <li><strong>Apptainer:</strong> For complex dependencies using
+        conda or ensuring reproducibility. You build a container image
+        (often from a Dockerfile, converted to Apptainer format
+        <em>.sif</em>) locally, transfer the <code>.sif</code> file, and
+        run your job inside the container.
+        <ul>
+        <li><a
+        href="https://apptainer.org/docs/admin/main/installation.html#install-ubuntu-packages">Install
+        Apptainer</a></li>
+        <li><a
+        href="https://docs.alliancecan.ca/wiki/Apptainer#Creating_an_Apptainer_container_from_a_Dockerfile">Creating
+        Apptainer containers from Dockerfiles</a> (Note:
+        <code>docker build</code> cannot be run on Alliance
+        login/compute nodes).</li>
+        <li><a
+        href="https://docs.alliancecan.ca/wiki/Apptainer#Running_programs_within_a_container">Running
+        programs within a container</a>.</li>
+        </ul></li>
+        </ul></li>
+        <li><strong>Submit the Job:</strong>
+        <ul>
+        <li><p>Log in to the cluster via SSH.</p></li>
+        <li><p>Navigate to the directory containing your job script
+        (<code>.sh</code> or <code>.sub</code> file).</p></li>
+        <li><p>Submit the job using <code>sbatch</code>:</p>
+        <div class="sourceCode" id="cb7"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> your_job_script.sh</span></code></pre></div></li>
+        <li><p>SLURM will respond with a Job ID number if the submission
+        is successful.</p></li>
+        <li><p><strong>Submitting multiple jobs:</strong> If you have
+        many similar job scripts (e.g., <code>job1.sub</code>,
+        <code>job2.sub</code>, …) in a directory, you can submit them
+        all carefully using <code>find</code>:</p>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Be cautious with this command - ensure it targets only the intended files</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-maxdepth</span> 1 <span class="at">-name</span> <span class="st">&quot;*.sub&quot;</span> <span class="at">-exec</span> sbatch {} <span class="dt">\;</span></span></code></pre></div></li>
+        </ul></li>
         </ol>
-        <h2 id="iii.-monitoring-job-execution-and-retrieving-results">III.
-            Monitoring Job Execution and Retrieving Results</h2>
+        <h2
+        id="iii.-monitoring-job-execution-and-retrieving-results">III.
+        Monitoring Job Execution and Retrieving Results</h2>
         <ol start="10" type="1">
-            <li><strong>Monitor Your Jobs:</strong>
-                <ul>
-                    <li>Use these commands within your SSH session:
-                        <ul>
-                            <li><code>squeue -u &lt;your_username&gt;</code>: Shows the
-                                status of your currently running or pending (waiting) jobs.
-                                (Common alias: <code>sq</code>).</li>
-                            <li><code>seff &lt;Job_ID&gt;</code>: Displays CPU and memory
-                                <em>efficiency</em> for a <em>completed</em> job. Useful for
-                                tuning resource requests (<code>#SBATCH</code> directives) for
-                                future runs.
-                            </li>
-                            <li><code>scontrol show job &lt;Job_ID&gt;</code>: Shows
-                                detailed information about a specific job (running, pending, or
-                                recently completed).</li>
-                            <li><code>scancel &lt;Job_ID&gt;</code>: Cancels a running or
-                                pending job.</li>
-                            <li><code>sacct -j &lt;Job_ID&gt; --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,AllocCPUS</code>:
-                                Shows accounting information for completed jobs.</li>
-                            <li><code>quota</code>: Check your disk space usage and limits
-                                in your <code>/home</code>, <code>/project</code>, and
-                                <code>/scratch</code> directories.
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><strong>Retrieve Job Results:</strong>
-                <ul>
-                    <li>
-                        <p>Once your jobs are finished, the output files (specified
-                            in your job script or generated by your code) will be in the
-                            designated directories on the cluster.</p>
-                    </li>
-                    <li>
-                        <p>You can compress results directories on the cluster first
-                            if they are large:</p>
-                        <div class="sourceCode" id="cb9">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On the cluster</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> my_results_archive.tar.gz /path/to/your/results/directory/</span></code></pre>
-                        </div>
-                    </li>
-                    <li>
-                        <p>Use <code>scp</code> or <code>rsync</code> from your
-                            <strong>local computer</strong> to download the files/archives.
-                            Remember to use the cluster’s <strong>Data Transfer Node
-                                (DTN)</strong> for large downloads.
-                        </p>
-                    </li>
-                    <li>
-                        <p><strong>Example using <code>scp</code> from local
-                                machine:</strong></p>
-                        <div class="sourceCode" id="cb10">
-                            <pre
-                                class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_dtn_node<span class="op">&gt;</span>:/path/on/cluster/to/my_results_archive.tar.gz .</span>
+        <li><strong>Monitor Your Jobs:</strong>
+        <ul>
+        <li>Use these commands within your SSH session:
+        <ul>
+        <li><code>squeue -u &lt;your_username&gt;</code>: Shows the
+        status of your currently running or pending (waiting) jobs.
+        (Common alias: <code>sq</code>).</li>
+        <li><code>seff &lt;Job_ID&gt;</code>: Displays CPU and memory
+        <em>efficiency</em> for a <em>completed</em> job. Useful for
+        tuning resource requests (<code>#SBATCH</code> directives) for
+        future runs.</li>
+        <li><code>scontrol show job &lt;Job_ID&gt;</code>: Shows
+        detailed information about a specific job (running, pending, or
+        recently completed).</li>
+        <li><code>scancel &lt;Job_ID&gt;</code>: Cancels a running or
+        pending job.</li>
+        <li><code>sacct -j &lt;Job_ID&gt; --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,AllocCPUS</code>:
+        Shows accounting information for completed jobs.</li>
+        <li><code>quota</code>: Check your disk space usage and limits
+        in your <code>/home</code>, <code>/project</code>, and
+        <code>/scratch</code> directories.</li>
+        </ul></li>
+        </ul></li>
+        <li><strong>Retrieve Job Results:</strong>
+        <ul>
+        <li><p>Once your jobs are finished, the output files (specified
+        in your job script or generated by your code) will be in the
+        designated directories on the cluster.</p></li>
+        <li><p>You can compress results directories on the cluster first
+        if they are large:</p>
+        <div class="sourceCode" id="cb9"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On the cluster</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> my_results_archive.tar.gz /path/to/your/results/directory/</span></code></pre></div></li>
+        <li><p>Use <code>scp</code> or <code>rsync</code> from your
+        <strong>local computer</strong> to download the files/archives.
+        Remember to use the cluster’s <strong>Data Transfer Node
+        (DTN)</strong> for large downloads.</p></li>
+        <li><p><strong>Example using <code>scp</code> from local
+        machine:</strong></p>
+        <div class="sourceCode" id="cb10"><pre
+        class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_dtn_node<span class="op">&gt;</span>:/path/on/cluster/to/my_results_archive.tar.gz .</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Or download a specific file</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_dtn_node<span class="op">&gt;</span>:/path/on/cluster/to/output.log ./local_destination/</span></code></pre>
-                        </div>
-                    </li>
-                </ul>
-            </li>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_dtn_node<span class="op">&gt;</span>:/path/on/cluster/to/output.log ./local_destination/</span></code></pre></div></li>
+        </ul></li>
         </ol>
         <h2 id="iv.-further-resources">IV. Further Resources</h2>
         <ul>
-            <li><strong>Alliance Documentation Wiki:</strong> <a
-                    href="https://docs.alliancecan.ca/wiki/">https://docs.alliancecan.ca/wiki/</a>
-                (Primary resource for most topics)</li>
-            <li><strong>Running Jobs:</strong> <a
-                    href="https://docs.alliancecan.ca/wiki/Running_jobs">https://docs.alliancecan.ca/wiki/Running_jobs</a>
-            </li>
-            <li><strong>SLURM <code>sbatch</code> Documentation:</strong> <a
-                    href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a>
-                (Detailed list of <code>#SBATCH</code> options)</li>
-            <li><strong>Specific Cluster Documentation:</strong> Linked in
-                Section I, Step 3.</li>
-            <li><strong>General Search:</strong> Use search terms like
-                “Digital Research Alliance Canada <topic>” or “Compute Canada
-                    <topic>” (older name, but still yields relevant results).</li>
+        <li><strong>Alliance Documentation Wiki:</strong> <a
+        href="https://docs.alliancecan.ca/wiki/">https://docs.alliancecan.ca/wiki/</a>
+        (Primary resource for most topics)</li>
+        <li><strong>Running Jobs:</strong> <a
+        href="https://docs.alliancecan.ca/wiki/Running_jobs">https://docs.alliancecan.ca/wiki/Running_jobs</a></li>
+        <li><strong>SLURM <code>sbatch</code> Documentation:</strong> <a
+        href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a>
+        (Detailed list of <code>#SBATCH</code> options)</li>
+        <li><strong>Specific Cluster Documentation:</strong> Linked in
+        Section I, Step 3.</li>
+        <li><strong>General Search:</strong> Use search terms like
+        “Digital Research Alliance Canada <topic>” or “Compute Canada
+        <topic>” (older name, but still yields relevant results).</li>
         </ul>
     </div>
 
