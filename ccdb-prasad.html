@@ -421,15 +421,12 @@
         <li><code>squeue -u &lt;your_username&gt;</code>: Shows the
         status of your currently running or pending (waiting) jobs.
         (Common alias: <code>sq</code>).</li>
+        <li><code>scancel &lt;Job_ID&gt;</code>: Cancels a running or
+        pending job.</li>
         <li><code>seff &lt;Job_ID&gt;</code>: Displays CPU and memory
         <em>efficiency</em> for a <em>completed</em> job. Useful for
         tuning resource requests (<code>#SBATCH</code> directives) for
         future runs.</li>
-        <li><code>scontrol show job &lt;Job_ID&gt;</code>: Shows
-        detailed information about a specific job (running, pending, or
-        recently completed).</li>
-        <li><code>scancel &lt;Job_ID&gt;</code>: Cancels a running or
-        pending job.</li>
         <li><code>sacct -j &lt;Job_ID&gt; --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,AllocCPUS</code>:
         Shows accounting information for completed jobs.</li>
         <li><code>quota</code>: Check your disk space usage and limits
