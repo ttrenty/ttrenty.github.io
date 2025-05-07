@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Use with pandoc CCDB_prasad_Tutorial.md -o CCDB_prasad_Tutorial.html --standalone --template=template.html --metadata title="CCDB Tutorial"  -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,35 +9,133 @@
     <!-- GitHub Markdown CSS -->
     <link rel="stylesheet" href="css/github-markdown.css">
 
-    <!-- Pandoc Syntax Highlighting CSS -->
-    <!-- <link rel="stylesheet" href="kate.css"> -->
-
-    <!-- Highlight.js Theme Link - ADD AN ID -->
+    <!-- Highlight.js Theme Link -->
     <link id="hljs-theme-link" rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
-    <!-- Note: Initial href can be either light or dark, the JS will correct it on load -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <!-- Removed hljs.highlightAll() from here, call it after theme is set if needed, but often it's fine -->
 
     <style>
+        html {
+            scroll-behavior: smooth;
+            /* For smoother anchor link jumps */
+        }
+
         /* Basic page setup */
         body {
             margin: 0;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
             background-color: #f6f8fa;
-            /* Default light */
+            /* Default light page background */
+            color: #24292f;
             transition: background-color 0.3s, color 0.3s;
+            padding: 2rem;
+            /* Overall page padding */
+            box-sizing: border-box;
+            /* Padding included in body's dimensions */
+            min-height: 100vh;
+            /* Ensure body fills viewport height */
+        }
+
+        .page-layout-container {
+            display: flex;
+            gap: 2rem;
+            /* Space between menu and content-wrapper */
+            /* Max width: menu (240px) + gap (2rem, e.g., 32px) + markdown-body (980px) */
+            max-width: calc(240px + 2rem + 980px);
+            width: 100%;
+            /* Occupy available width within body's padding */
+            margin: 0 auto;
+            /* Center this container within the body */
+        }
+
+        #side-menu {
+            width: 240px;
+            /* Width of the side menu */
+            flex-shrink: 0;
+            /* Prevent menu from shrinking */
+            position: sticky;
+            /* Stick to top of body's content box (which is 2rem from viewport top due to body padding) */
+            top: 0;
+            /* Fill height between body's top/bottom padding */
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+            /* Scroll for long menus */
+            background-color: transparent;
+            /* Menu bg blends with body */
+            padding: 0.5rem;
+            /* Internal padding for menu items */
+            font-size: 0.875em;
+            /* Slightly smaller font for menu */
+        }
+
+        #side-menu h2 {
+            /* "Contents" heading */
+            margin-top: 0;
+            margin-bottom: 0.75em;
+            font-size: 0.95em;
+            font-weight: 600;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid #d0d7de;
+            /* Light mode separator */
+            color: #24292f;
+        }
+
+        #side-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #side-menu li a {
+            display: block;
+            padding: 0.4em 0.8em;
+            text-decoration: none;
+            color: #57606a;
+            border-radius: 4px;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, font-weight 0.2s ease-in-out;
+        }
+
+        #side-menu li a:hover {
+            background-color: #f0f3f6;
+            color: #0969da;
+        }
+
+        #side-menu li.toc-level-1 a {
+            padding-left: 0.8em;
+            font-weight: 500;
+        }
+
+        #side-menu li.toc-level-2 a {
+            padding-left: 1.8em;
+        }
+
+        #side-menu li.toc-level-3 a {
+            padding-left: 2.8em;
+        }
+
+        #side-menu li a.active {
+            font-weight: 600;
+            color: #0969da;
+        }
+
+        .content-wrapper {
+            flex-grow: 1;
+            /* Takes up space allocated by page-layout-container's max-width logic */
+            display: flex;
+            /* Can be useful if content-wrapper needs internal flex, not strictly needed here */
+            /* justify-content: flex-start; /* markdown-body will fill it anyway */
+            min-width: 0;
+            /* Crucial for flex items */
         }
 
         .markdown-body {
+            min-width: 0;
             max-width: 980px;
+            /* This is the primary content width constraint */
             width: 100%;
+            /* Takes full width of its parent (content-wrapper) */
             background: white;
-            /* Default light */
             padding: 2em;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
@@ -49,6 +145,26 @@
         /* Dark mode styles */
         body.dark-mode {
             background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        body.dark-mode #side-menu h2 {
+            border-bottom-color: #30363d;
+            color: #c9d1d9;
+        }
+
+        body.dark-mode #side-menu li a {
+            color: #7d8590;
+        }
+
+        body.dark-mode #side-menu li a:hover {
+            background-color: #1c2128;
+            color: #58a6ff;
+        }
+
+        body.dark-mode #side-menu li a.active {
+            font-weight: 600;
+            color: #58a6ff;
         }
 
         body.dark-mode .markdown-body {
@@ -61,27 +177,17 @@
             color: #58a6ff;
         }
 
-        /* Remove the specific code/pre background overrides here if you want the highlight.js theme to control it entirely */
-        /* Or keep them if you want a consistent code background independent of the syntax colors */
         body.dark-mode .markdown-body code,
         body.dark-mode .markdown-body pre {
             background-color: #21262d;
-            /* Example override for dark mode */
         }
 
-        /* You might want a similar override for light mode if needed */
-        body:not(.dark-mode) .markdown-body code,
-        body:not(.dark-mode) .markdown-body pre {
-            /* background-color: #f6f8fa; Example override for light mode */
-            /* Often the default highlight.js theme background is fine */
-        }
-
-
-        /* Theme toggle switch (no changes needed here) */
+        /* Theme toggle switch */
         .theme-switch {
             position: fixed;
             top: 1rem;
             right: 1rem;
+            z-index: 1000;
             width: 50px;
             height: 26px;
             background-color: #ccc;
@@ -105,6 +211,10 @@
             transition: transform 0.3s, background-color 0.3s;
         }
 
+        .theme-switch .slider::before {
+            content: "☀️";
+        }
+
         body.dark-mode .theme-switch {
             background-color: #666;
         }
@@ -112,16 +222,39 @@
         body.dark-mode .theme-switch .slider {
             background-color: #161b22;
             color: #f1c40f;
-            /* Sun color */
             transform: translateX(24px);
-        }
-
-        .theme-switch .slider::before {
-            content: "☀️";
         }
 
         body.dark-mode .theme-switch .slider::before {
             content: "🌙";
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+                /* Reduced overall padding for smaller screens */
+            }
+
+            .page-layout-container {
+                flex-direction: column;
+                /* Stack menu and content vertically */
+                gap: 1rem;
+                /* max-width and margin:auto still apply, centering the column */
+            }
+
+            #side-menu {
+                width: 100%;
+                position: static;
+                top: auto;
+                height: auto;
+                max-height: 300px;
+            }
+
+            .theme-switch {
+                top: 0.5rem;
+                right: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -132,393 +265,692 @@
         <div class="slider"></div>
     </div>
 
-    <div class="markdown-body">
-        <h1
-        id="running-jobs-on-digital-research-alliance-of-canada-hpc-clusters"><strong>Running
-        Jobs on Digital Research Alliance of Canada HPC
-        Clusters</strong></h1>
-        <p>This guide provides instructions on how to set up an account
-        and run computational jobs on the High-Performance Computing
-        (HPC) clusters provided by the Digital Research Alliance of
-        Canada (the Alliance, formerly Compute Canada).</p>
-        <p>Please report issues on Discord.</p>
-        <h2 id="i.-account-creation-and-configuration">I. Account
-        Creation and Configuration</h2>
-        <ol type="1">
-        <li><strong>Create an Alliance Account:</strong>
-        <ul>
-        <li>Go to the <a
-        href="https://ccdb.alliancecan.ca/account_application">account
-        application page</a>.</li>
-        <li>Use your University of Calgary or University of Toronto
-        email address (e.g., <code>@ucalgary.ca</code> or
-        <code>@mail.utoronto.ca</code>).</li>
-        <li>In the ‘Sponsor’ field, enter the PI code provided by Viki:
-        <code>vdr-502-05</code>.</li>
-        <li>Submit the application and wait for sponsor approval (from
-        Viki) followed by validation from the Alliance staff.</li>
-        </ul></li>
-        <li><strong>Enable Two-Factor Authentication (2FA):</strong>
-        <ul>
-        <li>Set up Duo Mobile for 2FA following the instructions <a
-        href="https://ccdb.alliancecan.ca/multi_factor_authentications">here</a>.
-        This is required to log in to the clusters.</li>
-        </ul></li>
-        <li><strong>Confirm Cluster Access:</strong>
-        <ul>
-        <li>Once your account is active, check your resource allocations
-        <a href="https://ccdb.alliancecan.ca/me/allocations">here</a>.
-        You should have access to the resources associated with your
-        sponsor’s allocation.</li>
-        <li>The primary general-purpose unlimited access clusters
-        recommended for use are:
-        <ul>
-        <li><a
-        href="https://docs.alliancecan.ca/wiki/Narval">Narval</a></li>
-        <li><a
-        href="https://docs.alliancecan.ca/wiki/B%C3%A9luga">Beluga</a></li>
-        <li><a
-        href="https://docs.alliancecan.ca/wiki/Cedar">Cedar</a></li>
-        </ul></li>
-        <li><strong>Note:</strong> <a
-        href="https://docs.alliancecan.ca/wiki/Niagara">Niagara</a> is a
-        specialized large-scale cluster. Access requires a separate <a
-        href="https://ccdb.alliancecan.ca/services/opt_in">opt-in
-        application</a>. It also offers a web portal called ‘<a
-        href="https://ondemand.scinet.utoronto.ca/pun/sys/dashboard/">OnDemand</a>’
-        for simplified job management.</li>
-        <li><strong>Retired Cluster:</strong> Do not use <a
-        href="https://docs.alliancecan.ca/wiki/Graham">Graham</a>
-        anymore, as it is being decommissioned.</li>
-        <li><strong>Priority Access Cluster:</strong> When available,
-        you will be able to use the <code>rrg-vikikrpd</code> account on
-        the new <a href="https://docs.alliancecan.ca/wiki/Nibi">Nibi</a>
-        cluster and will have priority access to computing
-        resources.</li>
-        <li><strong>Check Status:</strong> Always check the <a
-        href="https://status.alliancecan.ca/">Alliance status page</a>
-        for planned maintenance or unexpected outages before starting
-        work.</li>
-        </ul></li>
-        <li><strong>Connect via SSH:</strong>
-        <ul>
-        <li><p>Connect to your chosen cluster’s login node using SSH.
-        Find the specific hostname on the cluster’s documentation page
-        (linked above). For example, for Narval:</p>
-        <div class="sourceCode" id="cb1"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>your_alliance_username<span class="op">&gt;</span>@narval.alliancecan.ca</span></code></pre></div></li>
-        <li><p>Follow the prompts, which will include authenticating
-        with your password and Duo 2FA.</p></li>
-        <li><p><strong>Recommendation (Easier Logins):</strong> Set up
-        SSH keys for passwordless login (you will still need Duo).</p>
-        <ul>
-        <li>Generate a key pair on your local machine: <a
-        href="https://docs.alliancecan.ca/wiki/Generating_SSH_keys_in_Windows">Windows
-        Guide</a> | <a
-        href="https://docs.alliancecan.ca/wiki/Using_SSH_keys_in_Linux">Linux/macOS/WSL
-        Guide</a>.</li>
-        <li>Copy the content of your <strong>public key</strong> file
-        (e.g., <code>id_rsa.pub</code> or
-        <code>id_ed25519.pub</code>).</li>
-        <li>Paste the public key into the <a
-        href="https://ccdb.alliancecan.ca/ssh_authorized_keys">SSH
-        Authorized Keys section</a> on the CCDB website. This allows the
-        key to be used across all Alliance clusters.</li>
-        </ul></li>
-        </ul></li>
-        </ol>
-        <h2 id="ii.-preparing-and-submitting-a-job">II. Preparing and
-        Submitting a Job</h2>
-        <ol start="5" type="1">
-        <li><strong>Understand Job Scripts:</strong>
-        <ul>
-        <li>A “job” is defined by a shell script (e.g., Bash) submitted
-        to the cluster’s workload manager, called
-        <strong>SLURM</strong>.</li>
-        <li>This script contains special comment lines starting with
-        <code>#SBATCH</code>. These are directives for SLURM, specifying
-        required resources (CPU cores, memory, wall time), account
-        information, and other job parameters. See <a
-        href="https://docs.alliancecan.ca/wiki/Running_jobs">Running
-        Jobs</a> for details.</li>
-        <li>The rest of the script contains the commands needed to run
-        your actual computation (e.g., loading software, running
-        code).</li>
-        <li>Conventionally, these scripts are often saved with a
-        <code>.sh</code> or <code>.sub</code> extension.</li>
-        </ul></li>
-        <li><strong>Example Job Script (<code>.sh</code> or
-        <code>.sub</code> file):</strong>
-        <ul>
-        <li><strong>Important:</strong> Carefully estimate resource
-        requests (<code>-n</code>, <code>--mem-per-cpu</code>,
-        <code>--time</code>). Overestimating can significantly delay
-        your job’s start time or lead to inefficient resource use.
-        Underestimating can cause your job to fail.</li>
-        <li><strong>Paths:</strong> Ensure any specified paths for
-        error/output files exist <em>before</em> submitting the job, or
-        use commands like <code>mkdir -p</code> within the script to
-        create them. Use absolute paths or paths relative to where you
-        submit the job from.</li>
-        </ul>
-        <div class="sourceCode" id="cb2"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-vikikrpd  # Specify the allocation account (check your allocations on CCDB)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -N 1                    # Number of compute nodes requested</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -n 4                    # Number of CPU cores requested (adjust as needed)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem-per-cpu=512M      # Memory per CPU core (e.g., 512M, 1G, 4G) (Don&#39;t use this on Niagara)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00-00:20:00      # Maximum wall time (D-HH:MM:SS format) - JOB WILL BE KILLED AFTER THIS</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=MyExampleJob # A descriptive name for your job</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=/path/to/your/project/logs/%x-%j.out  # Standard output file (%x=jobname, %j=jobid) (&#39;/path/to/your/project/logs&#39; has to already exist)</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=/path/to/your/project/logs/%x-%j.err   # Standard error file (%x=jobname, %j=jobid)</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-user=your_email@example.com # Email address for notifications (optional)</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-type=FAIL,INVALID_DEPEND,REQUEUE,STAGE_OUT #,</span><span class="re">END</span><span class="co"> # Send email on job failure or other events</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job started at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Running on host: </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Working directory: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Environment Setup ---&quot;</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.10</span>
+    <div class="page-layout-container">
+        <nav id="side-menu">
+            <h2>Contents</h2>
+            <ul id="menu-links">
+                <!-- Links will be dynamically inserted -->
+            </ul>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="markdown-body">
+                <h1
+                id="your-guide-to-using-digital-research-alliance-of-canada-hpc-clusters"><strong>Your
+                Guide to Using Digital Research Alliance of Canada HPC
+                Clusters</strong></h1>
+                <p>Welcome! This guide will walk you through setting up
+                your account and running your first computational tasks
+                (we call them “jobs”) on the powerful High-Performance
+                Computing (HPC) clusters provided by the Digital
+                Research Alliance of Canada (the Alliance). Think of
+                these HPC clusters as very powerful remote computers
+                that can handle much larger calculations than your
+                personal laptop or desktop.</p>
+                <p>If you run into any problems or have questions,
+                please don’t hesitate to ask for help on Discord.</p>
+                <h2 id="i.-getting-set-up-account-and-connection">I.
+                Getting Set Up: Account and Connection</h2>
+                <p>First, you’ll need an account and a way to securely
+                connect to the HPC clusters.</p>
+                <ol type="1">
+                <li><strong>Create an Alliance Account:</strong>
+                <ul>
+                <li>Go to the <a
+                href="https://ccdb.alliancecan.ca/account_application">account
+                application page</a>.</li>
+                <li>You’ll need to use your University of Calgary or
+                University of Toronto email address (e.g.,
+                <code>your.name@ucalgary.ca</code> or
+                <code>your.name@mail.utoronto.ca</code>).</li>
+                <li>In the ‘Sponsor’ field, enter the PI code Viki
+                provided: <code>vdr-502-05</code>.</li>
+                <li>After you submit, Viki will need to approve your
+                application, and then the Alliance staff will validate
+                it. You’ll receive emails about this.</li>
+                </ul></li>
+                <li><strong>Enable Two-Factor Authentication
+                (2FA):</strong>
+                <ul>
+                <li>Security is important! You’ll need to set up Duo
+                Mobile for 2FA. Follow the instructions <a
+                href="https://ccdb.alliancecan.ca/multi_factor_authentications">here</a>.
+                This adds an extra layer of security when you log
+                in.</li>
+                </ul></li>
+                <li><strong>Confirm Cluster Access:</strong>
+                <ul>
+                <li>Once your account is active, you can see what
+                resources you have access to <a
+                href="https://ccdb.alliancecan.ca/me/allocations">here</a>.</li>
+                <li>We generally recommend using these clusters:
+                <ul>
+                <li><a
+                href="https://docs.alliancecan.ca/wiki/Narval">Narval</a></li>
+                <li><a
+                href="https://docs.alliancecan.ca/wiki/B%C3%A9luga">Beluga</a></li>
+                <li><a
+                href="https://docs.alliancecan.ca/wiki/Cedar">Cedar</a></li>
+                </ul></li>
+                <li><strong>Note on Niagara:</strong> <a
+                href="https://docs.alliancecan.ca/wiki/Niagara">Niagara</a>
+                is a very large cluster for specialized tasks. If you
+                need it, you’ll have to apply separately <a
+                href="https://ccdb.alliancecan.ca/services/opt_in">here</a>.
+                Niagara also has a user-friendly web portal called ‘<a
+                href="https://ondemand.scinet.utoronto.ca/pun/sys/dashboard/">OnDemand</a>’.</li>
+                <li><strong>Retired Cluster:</strong> Please don’t use
+                <a
+                href="https://docs.alliancecan.ca/wiki/Graham">Graham</a>;
+                it’s being shut down.</li>
+                <li><strong>Priority Access Cluster:</strong> For
+                specific projects, you might use the
+                <code>rrg-vikikrpd</code> account on the new <a
+                href="https://docs.alliancecan.ca/wiki/Nibi">Nibi</a>
+                cluster, which gives you priority access.</li>
+                <li><strong>Always Check Status:</strong> Before you
+                start any work, it’s a good idea to check the <a
+                href="https://status.alliancecan.ca/">Alliance status
+                page</a> for any planned maintenance or unexpected
+                issues.</li>
+                </ul></li>
+                <li><strong>Connect to the Cluster using SSH (Your
+                Gateway to the HPC):</strong>
+                <ul>
+                <li><p>SSH (Secure Shell) is the way you’ll log in to
+                the HPC cluster. You’ll connect to a “login node,” which
+                is like the front door to the cluster.
+                <strong>Important:</strong> Login nodes are for managing
+                files and submitting jobs, not for running heavy
+                calculations.</p></li>
+                <li><p><strong>Tip: Working with Two Terminals for an
+                Easier Workflow</strong> When you connect to the HPC
+                using SSH (which we’ll do in a moment), the terminal
+                window you use for the <code>ssh</code> command will
+                become your command line <em>on the HPC</em>. However,
+                you’ll often need to perform tasks on your <em>local
+                computer</em> as well (like editing script files,
+                generating SSH keys as described below in this step, or
+                transferring files as described in Section II).</p>
+                <p>To make this easier and avoid constantly logging in
+                and out of the HPC, many users find it helpful to have
+                <strong>two terminal windows open from the
+                start</strong> on their personal computer:</p>
+                <ol type="1">
+                <li><strong>One terminal for your local
+                computer:</strong> Keep this window for commands you run
+                on your own machine (e.g., <code>ssh-keygen</code> for
+                setting up SSH keys, or <code>scp</code> for file
+                transfers later).</li>
+                <li><strong>One terminal for the HPC
+                connection:</strong> You’ll use this second window to
+                type the <code>ssh</code> command to log into the HPC.
+                Once connected, this terminal <em>becomes</em> your
+                window into the HPC.</li>
+                </ol>
+                <p>This setup allows you to easily switch between
+                managing things locally and working on the HPC.</p></li>
+                <li><p>Now, let’s connect. Find the specific hostname
+                (the address) for your chosen cluster on its
+                documentation page (linked above). For example, for
+                Narval:</p>
+                <ul>
+                <li><p>💻 <strong>On one of your computer’s terminal
+                windows (this one will become your HPC
+                terminal):</strong></p>
+                <div class="sourceCode" id="cb1"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>your_alliance_username<span class="op">&gt;</span>@narval.alliancecan.ca</span></code></pre></div>
+                <p>(Replace <code>&lt;your_alliance_username&gt;</code>
+                with the username you created.)</p></li>
+                </ul></li>
+                <li><p>You’ll be asked for your password and then your
+                Duo 2FA code.</p></li>
+                <li><p><strong>Make Logins Easier (Recommended): Set up
+                SSH Keys</strong></p>
+                <ul>
+                <li>SSH keys let you log in without typing your password
+                every time (you’ll still need Duo).</li>
+                <li>First, generate a key pair (a private key that stays
+                on your computer and a public key you give to the HPC):
+                <ul>
+                <li>💻 <strong>On your <em>local computer’s</em>
+                terminal (use the terminal window you’ve kept for local
+                tasks):</strong>
+                <ul>
+                <li>Follow the <a
+                href="https://docs.alliancecan.ca/wiki/Generating_SSH_keys_in_Windows">Windows
+                Guide</a> or <a
+                href="https://docs.alliancecan.ca/wiki/Using_SSH_keys_in_Linux">Linux/macOS/WSL
+                Guide</a>. This usually involves a command like
+                <code>ssh-keygen -t ed25519</code>.</li>
+                </ul></li>
+                </ul></li>
+                <li>Next, copy the content of your <strong>public
+                key</strong> file (it usually ends in <code>.pub</code>,
+                like <code>id_ed25519.pub</code>).</li>
+                <li>Paste this public key into the <a
+                href="https://ccdb.alliancecan.ca/ssh_authorized_keys">SSH
+                Authorized Keys section</a> on the CCDB website. This
+                lets all Alliance clusters know your key.</li>
+                </ul></li>
+                </ul></li>
+                </ol>
+                <p><strong>A Quick Guide to Basic Linux Terminal
+                Commands (for the HPC)</strong></p>
+                <p>Once you’re logged into the HPC cluster via SSH,
+                you’ll be using a Linux terminal. Here are some
+                fundamental commands you’ll use often. You’ll run these
+                in the terminal window that’s connected to the HPC.</p>
+                <ul>
+                <li><code>pwd</code> (Print Working Directory): Shows
+                you which directory (folder) you are currently in.</li>
+                <li><code>ls</code> (List): Lists the files and
+                directories in your current directory.
+                <ul>
+                <li>Try <code>ls -l</code> for a more detailed list or
+                <code>ls -a</code> to see hidden files.</li>
+                </ul></li>
+                <li><code>cd &lt;directory_name&gt;</code> (Change
+                Directory): Lets you move into a different directory.
+                <ul>
+                <li><code>cd ..</code> moves you up one directory
+                level.</li>
+                <li><code>cd ~</code> or just <code>cd</code> takes you
+                to your home directory.</li>
+                </ul></li>
+                <li><code>mkdir &lt;directory_name&gt;</code> (Make
+                Directory): Creates a new directory.</li>
+                <li><code>cp &lt;source_file&gt; &lt;destination_file_or_directory&gt;</code>
+                (Copy): Copies a file.</li>
+                <li><code>mv &lt;source&gt; &lt;destination&gt;</code>
+                (Move): Moves or renames a file or directory.</li>
+                <li><code>rm &lt;file_name&gt;</code> (Remove): Deletes
+                a file. <strong>Be careful, there’s no
+                undo!</strong></li>
+                <li><code>cat &lt;file_name&gt;</code> (Concatenate):
+                Displays the content of a file.</li>
+                <li><code>less &lt;file_name&gt;</code>: Lets you view a
+                file page by page (press <code>q</code> to quit). Useful
+                for long files.</li>
+                </ul>
+                <p>Don’t worry about memorizing these all at once!
+                You’ll get used to them with practice.</p>
+                <h2
+                id="ii.-preparing-and-submitting-your-computational-job">II.
+                Preparing and Submitting Your Computational Job</h2>
+                <p>A “job” is essentially a set of instructions you give
+                to the HPC to perform your calculations.</p>
+                <ol start="5" type="1">
+                <li><strong>Understand Job Scripts:</strong>
+                <ul>
+                <li>You’ll write these instructions in a special text
+                file called a “job script” (often ending in
+                <code>.sh</code> or <code>.sub</code>). This script is
+                usually written in Bash (a common command-line
+                language). You’ll typically create and edit this script
+                <strong>on your local computer</strong> using a text
+                editor.</li>
+                <li>Inside this script, lines starting with
+                <code>#SBATCH</code> are special instructions for
+                <strong>SLURM</strong>, the workload manager (the
+                software that organizes and runs jobs on the cluster).
+                These tell SLURM things like how much computing power
+                (CPU cores), memory, and time your job needs.</li>
+                <li>The rest of the script contains the actual commands
+                to run your program (e.g., load software, execute your
+                Python code).</li>
+                </ul></li>
+                <li><strong>Example Job Script (e.g.,
+                <code>my_job.sh</code>):</strong>
+                <ul>
+                <li><strong>Important Tip:</strong> Estimating resources
+                (<code>-n</code>, <code>--mem-per-cpu</code>,
+                <code>--time</code>) is key.
+                <ul>
+                <li>If you ask for too much, your job might wait longer
+                to start or waste resources.</li>
+                <li>If you ask for too little, your job might fail.
+                Start with reasonable estimates and adjust based on how
+                your jobs perform (see <code>seff</code> command
+                later).</li>
+                </ul></li>
+                <li><strong>Paths:</strong> Make sure any folders you
+                specify for output/error files (like
+                <code>/path/to/your/project/logs/</code>) actually exist
+                on the HPC <em>before</em> you submit the job. You can
+                use <code>mkdir -p /path/to/your/project/logs</code> in
+                your job script (this command will run on the HPC) or
+                create them manually in your HPC terminal. Using
+                absolute paths (starting with <code>/</code>) is often
+                safest. Use <code>pwd</code> to find the absolute path
+                of your current directory.</li>
+                </ul>
+                <div class="sourceCode" id="cb2"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-vikikrpd  # Your group&#39;s allocation account (check CCDB)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -N 1                    # Number of computers (nodes) you need (usually 1)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -n 4                    # Number of CPU cores (processors) (adjust to your needs)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem-per-cpu=512M      # Memory for each CPU core (e.g., 512M, 1G, 4G)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># (Don&#39;t use this specific option on Niagara)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00-00:20:00      # Max time your job can run (Days-HH:MM:SS)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># YOUR JOB WILL BE STOPPED AFTER THIS TIME!</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=MyExampleJob # A descriptive name for your job</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=/path/to/your/project/logs/%x-%j.out  # Where standard output goes (%x=jobname, %j=jobid)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                                        <span class="co"># Make sure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=/path/to/your/project/logs/%x-%j.err   # Where error messages go</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                                        <span class="co"># Make sure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-user=your_email@example.com # Optional: Get emails about your job</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-type=FAIL,</span><span class="re">END</span><span class="co"> # Optional: Email on FAILure or when job ENDs</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job started on </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st"> at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;My working directory on HPC is: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ex">virtualenv</span> <span class="at">--no-download</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env&quot;</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env/bin/activate&quot;</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Install dependencies (use --no-index if you have pre-downloaded wheels)</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># See: https://docs.alliancecan.ca/wiki/Python#Installing_packages_in_a_virtual_environment</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--no-index</span> <span class="at">--upgrade</span> pip</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install numpy <span class="at">--no-index</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install --no-index -r /path/to/your/project/requirements.txt</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Running Python Script ---&quot;</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> /path/to/your/project/src/my_script.py <span class="at">--input</span> /path/to/data <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$LOG_DIR</span><span class="st">/results.txt&quot;</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="va">EXIT_CODE</span><span class="op">=</span><span class="va">$?</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Python script finished with exit code </span><span class="va">$EXIT_CODE</span><span class="st"> ---&quot;</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: Copy important results from $SLURM_TMPDIR back to persistent storage if needed</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># cp $SLURM_TMPDIR/some_temp_output.dat /path/to/your/project/results/</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job finished at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$EXIT_CODE</span></span></code></pre></div></li>
-        <li><strong>Transfer Files to the Cluster:</strong>
-        <ul>
-        <li><p>Organize your code, scripts, and any necessary input data
-        locally.</p></li>
-        <li><p>Use <code>scp</code> or <code>rsync</code> to transfer
-        files to your <strong>home directory</strong> (<code>~</code> or
-        <code>/path/to/&lt;username&gt;</code>) on the cluster’s login
-        node. For large transfers, use the cluster’s dedicated
-        <strong>Data Transfer Node (DTN)</strong> - find its hostname in
-        the cluster documentation.</p>
-        <ul>
-        <li><strong>Example using <code>scp</code> to home
-        directory:</strong></li>
-        </ul>
-        <div class="sourceCode" id="cb3"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a single file</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> local_file.txt <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:<span class="op">&lt;</span>destination_path<span class="op">&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># e.g., scp my_script.py user@narval.alliancecan.ca:~/project_dir/</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a whole directory recursively</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> local_directory <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/project_dir/</span></code></pre></div>
-        <ul>
-        <li><strong>Example using <code>rsync</code> (often more
-        efficient for directories):</strong></li>
-        </ul>
-        <div class="sourceCode" id="cb4"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync local_directory to remote project_dir, excluding certain patterns</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;__pycache__/&#39;</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;*.tmp&#39;</span> local_directory/ <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/project_dir/</span></code></pre></div></li>
-        <li><p><strong>Compressing large transfers:</strong> For very
-        large directories, consider creating a compressed archive
-        (<code>.tar.gz</code>) locally first, transferring the single
-        archive file, and then decompressing it on the cluster.</p>
-        <div class="sourceCode" id="cb5"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locally: Create compressed archive</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> project_archive.tar.gz local_directory/</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Transfer using scp or rsync</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> project_archive.tar.gz <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_login_node<span class="op">&gt;</span>:~/</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># On the cluster (after SSHing in): Decompress</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> project_archive.tar.gz</span></code></pre></div>
-        <ul>
-        <li><p>For potentially better compression ratios on large files
-        (at the cost of time), consider <code>xz</code>:</p>
-        <div class="sourceCode" id="cb6"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compress (uses all available cores): tar cf - local_directory | xz -T0 -z - &gt; project_archive.tar.xz</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Decompress (uses all available cores): xz -T0 -d -c project_archive.tar.xz | tar xf -</span></span></code></pre></div></li>
-        </ul></li>
-        <li><p><strong>Storage Locations:</strong> Once files are on the
-        cluster (in your home directory), move or copy them to
-        appropriate storage locations like <code>/project</code> or
-        <code>/scratch</code> depending on your needs.</p></li>
-        <li><p><strong>Warning:</strong> Be aware of the <a
-        href="https://docs.alliancecan.ca/wiki/Scratch_purging_policy">Scratch
-        Purging Policy</a>. Files in <code>/scratch</code> may be
-        automatically deleted after a certain period.
-        <code>/project</code> space is generally preferred for long-term
-        storage related to specific allocations. Check your available
-        space with the <code>quota</code> command.</p></li>
-        </ul></li>
-        <li><strong>Manage Software Dependencies:</strong>
-        <ul>
-        <li><strong>Modules:</strong> The simplest way is using
-        pre-installed software via the <code>module</code> system (as
-        shown in the example script). Use
-        <code>module avail &lt;software_name&gt;</code> to search and
-        <code>module load &lt;module_name&gt;</code> to load.</li>
-        <li><strong>Python <code>venv</code>:</strong> Recommended for
-        Python projects. Create a virtual environment (ideally within
-        your job script in <code>$SLURM_TMPDIR</code> for performance,
-        or in your <code>/project</code> or <code>/home</code> space).
-        Install packages using <code>pip</code>. Use
-        <code>--no-index</code> with <code>pip</code> if you have
-        pre-downloaded package wheels available in a central location
-        (see Alliance Python docs).</li>
-        <li><strong>Apptainer:</strong> For complex dependencies using
-        conda or ensuring reproducibility. You build a container image
-        (often from a Dockerfile, converted to Apptainer format
-        <em>.sif</em>) locally, transfer the <code>.sif</code> file, and
-        run your job inside the container.
-        <ul>
-        <li><a
-        href="https://apptainer.org/docs/admin/main/installation.html#install-ubuntu-packages">Install
-        Apptainer</a></li>
-        <li><a
-        href="https://docs.alliancecan.ca/wiki/Apptainer#Creating_an_Apptainer_container_from_a_Dockerfile">Creating
-        Apptainer containers from Dockerfiles</a> (Note:
-        <code>docker build</code> cannot be run on Alliance
-        login/compute nodes).</li>
-        <li><a
-        href="https://docs.alliancecan.ca/wiki/Apptainer#Running_programs_within_a_container">Running
-        programs within a container</a>.</li>
-        </ul></li>
-        </ul></li>
-        <li><strong>Submit the Job:</strong>
-        <ul>
-        <li><p>Log in to the cluster via SSH.</p></li>
-        <li><p>Navigate to the directory containing your job script
-        (<code>.sh</code> or <code>.sub</code> file).</p></li>
-        <li><p>Submit the job using <code>sbatch</code>:</p>
-        <div class="sourceCode" id="cb7"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> your_job_script.sub</span></code></pre></div></li>
-        <li><p>SLURM will respond with a Job ID number if the submission
-        is successful.</p></li>
-        <li><p><strong>Submitting multiple jobs:</strong> If you have
-        many similar job scripts (e.g., <code>job1.sub</code>,
-        <code>job2.sub</code>, …) in a directory, you can submit them
-        all carefully using <code>find</code>:</p>
-        <div class="sourceCode" id="cb8"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Be cautious with this command - ensure it targets only the intended files</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-maxdepth</span> 1 <span class="at">-name</span> <span class="st">&quot;*.sub&quot;</span> <span class="at">-exec</span> sbatch {} <span class="dt">\;</span></span></code></pre></div></li>
-        </ul></li>
-        </ol>
-        <h2
-        id="iii.-monitoring-job-execution-and-retrieving-results">III.
-        Monitoring Job Execution and Retrieving Results</h2>
-        <ol start="10" type="1">
-        <li><strong>Monitor Your Jobs:</strong>
-        <ul>
-        <li>Use these commands within your SSH session:
-        <ul>
-        <li><code>squeue -u &lt;your_username&gt;</code>: Shows the
-        status of your currently running or pending (waiting) jobs.
-        (Common alias: <code>sq</code>).</li>
-        <li><code>scancel &lt;Job_ID&gt;</code>: Cancels a running or
-        pending job.</li>
-        <li><code>seff &lt;Job_ID&gt;</code>: Displays CPU and memory
-        <em>efficiency</em> for a <em>completed</em> job. Useful for
-        tuning resource requests (<code>#SBATCH</code> directives) for
-        future runs.</li>
-        <li><code>sacct -j &lt;Job_ID&gt; --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,AllocCPUS</code>:
-        Shows accounting information for completed jobs.</li>
-        <li><code>quota</code>: Check your disk space usage and limits
-        in your <code>/home</code>, <code>/project</code>, and
-        <code>/scratch</code> directories.</li>
-        </ul></li>
-        </ul></li>
-        <li><strong>Retrieve Job Results:</strong>
-        <ul>
-        <li><p>Once your jobs are finished, the output files (specified
-        in your job script or generated by your code) will be in the
-        designated directories on the cluster.</p></li>
-        <li><p>You can compress results directories on the cluster first
-        if they are large:</p>
-        <div class="sourceCode" id="cb9"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On the cluster</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> my_results_archive.tar.gz /path/to/your/results/directory/</span></code></pre></div></li>
-        <li><p>Use <code>scp</code> or <code>rsync</code> from your
-        <strong>local computer</strong> to download the files/archives.
-        Remember to use the cluster’s <strong>Data Transfer Node
-        (DTN)</strong> for large downloads.</p></li>
-        <li><p><strong>Example using <code>scp</code> from local
-        machine:</strong></p>
-        <div class="sourceCode" id="cb10"><pre
-        class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_dtn_node<span class="op">&gt;</span>:/path/on/cluster/to/my_results_archive.tar.gz .</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Or download a specific file</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@<span class="op">&lt;</span>cluster_dtn_node<span class="op">&gt;</span>:/path/on/cluster/to/output.log ./local_destination/</span></code></pre></div></li>
-        </ul></li>
-        </ol>
-        <h2 id="iv.-further-resources">IV. Further Resources</h2>
-        <ul>
-        <li><strong>Alliance Documentation Wiki:</strong> <a
-        href="https://docs.alliancecan.ca/wiki/">https://docs.alliancecan.ca/wiki/</a>
-        (Primary resource for most topics)</li>
-        <li><strong>Running Jobs:</strong> <a
-        href="https://docs.alliancecan.ca/wiki/Running_jobs">https://docs.alliancecan.ca/wiki/Running_jobs</a></li>
-        <li><strong>SLURM <code>sbatch</code> Documentation:</strong> <a
-        href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a>
-        (Detailed list of <code>#SBATCH</code> options)</li>
-        <li><strong>Specific Cluster Documentation:</strong> Linked in
-        Section I, Step 3.</li>
-        <li><strong>General Search:</strong> Use search terms like
-        “Digital Research Alliance Canada <topic>” or “Compute Canada
-        <topic>” (older name, but still yields relevant results).</li>
-        </ul>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Setting up software (on HPC) ---&quot;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Load pre-installed software (modules)</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.10</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a temporary, private workspace for this job on the HPC</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># This is often faster for installing packages and running code</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># $SLURM_TMPDIR is a special fast, temporary directory for your job on the HPC</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ex">virtualenv</span> <span class="at">--no-download</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env&quot;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env/bin/activate&quot;</span> <span class="co"># Activate the virtual environment</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Installing Python packages (if any) (on HPC) ---&quot;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Install necessary Python packages.</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Using --no-index tells pip not to look online, useful if you have pre-downloaded packages (&quot;wheels&quot;)</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co"># See: https://docs.alliancecan.ca/wiki/Python#Installing_packages_in_a_virtual_environment</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--no-index</span> <span class="at">--upgrade</span> pip</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install numpy <span class="at">--no-index</span> <span class="co"># Example: install numpy</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># If you have many packages, list them in a requirements.txt file:</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install --no-index -r /path/to/your/project/requirements.txt # Ensure this path is correct on the HPC</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Running my Python script (on HPC) ---&quot;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with the actual command to run your code</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure to use correct paths to your script and data on the HPC</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> /path/to/your/project/src/my_script.py <span class="at">--input</span> /path/to/data <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.txt&quot;</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_EXIT_CODE</span><span class="op">=</span><span class="va">$?</span> <span class="co"># Save the exit code of your script</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Python script finished with exit code </span><span class="va">$SCRIPT_EXIT_CODE</span><span class="st"> (on HPC) ---&quot;</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: If your script created important files in $SLURM_TMPDIR,</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># copy them back to your persistent storage (e.g., /project or /home) on the HPC</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.txt&quot;</span> /path/to/your/project/results/my_job_results.txt</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job finished at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$SCRIPT_EXIT_CODE</span> <span class="co"># Important: Exit with your script&#39;s exit code</span></span></code></pre></div></li>
+                <li><strong>Transfer Your Files to the Cluster:</strong>
+                <ul>
+                <li><p>Get your job script, Python code, and any input
+                data ready on your local computer.</p></li>
+                <li><p>You’ll use commands like <code>scp</code> (secure
+                copy) or <code>rsync</code> (remote sync, good for
+                directories) to transfer files. These commands are run
+                <strong>on your local computer’s terminal</strong> (the
+                one you kept for local tasks). You’ll transfer files
+                from your computer to your <strong>home
+                directory</strong> (<code>~</code> or
+                <code>/home/&lt;your_username&gt;</code>) or project
+                directory on the HPC cluster’s login node.</p></li>
+                <li><p>For very large files, it’s better to use the
+                cluster’s dedicated <strong>Data Transfer Node
+                (DTN)</strong>. Find its hostname in the cluster’s
+                documentation.</p>
+                <ul>
+                <li><p>💻 <strong>On your local computer’s
+                terminal:</strong></p>
+                <div class="sourceCode" id="cb3"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a single file (e.g., your job script)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># scp &lt;local_file_path&gt; &lt;username&gt;@&lt;cluster_login_node_or_dtn&gt;:&lt;path_on_HPC&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> my_job.sh your_username@narval.alliancecan.ca:~/my_project/</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a whole directory recursively (-r)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> local_code_folder your_username@narval.alliancecan.ca:~/my_project/</span></code></pre></div></li>
+                <li><p>💻 <strong>On your local computer’s terminal
+                (using <code>rsync</code> - often better for
+                directories):</strong></p>
+                <div class="sourceCode" id="cb4"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rsync -avz &lt;local_directory/&gt; &lt;username&gt;@&lt;cluster_login_node_or_dtn&gt;:&lt;path_on_HPC_directory/&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The trailing slashes are important for how rsync behaves!</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;__pycache__/&#39;</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;*.tmp&#39;</span> local_code_folder/ your_username@narval.alliancecan.ca:~/my_project/code_folder/</span></code></pre></div></li>
+                </ul></li>
+                <li><p><strong>Tip for Large Transfers: Compress
+                First!</strong> If you have many files or a large
+                directory, it’s often faster to compress it into a
+                single archive file (like a <code>.tar.gz</code> or
+                “tarball”) on your computer, transfer that single file,
+                and then uncompress it on the cluster.</p>
+                <ul>
+                <li><p>💻 <strong>On your local computer’s terminal
+                (create archive):</strong></p>
+                <div class="sourceCode" id="cb5"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> project_archive.tar.gz local_directory_to_compress/</span></code></pre></div></li>
+                <li><p>💻 <strong>On your local computer’s terminal
+                (transfer archive):</strong></p>
+                <div class="sourceCode" id="cb6"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> project_archive.tar.gz your_username@narval.alliancecan.ca:~/</span></code></pre></div></li>
+                <li><p>🌐 <strong>On the HPC cluster’s terminal (after
+                SSHing in, decompress archive):</strong></p>
+                <div class="sourceCode" id="cb7"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, navigate to where you put the archive (e.g., your home directory on HPC)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> project_archive.tar.gz</span></code></pre></div></li>
+                </ul></li>
+                <li><p><strong>Where to Store Files on the
+                HPC:</strong></p>
+                <ul>
+                <li>Your home directory (<code>~</code>) is for scripts,
+                small software, and personal files. It usually has
+                limited space.</li>
+                <li>Depending on the cluster, you may have a
+                <code>project/</code> directory for larger datasets and
+                shared files. Prefer this for active research data.</li>
+                <li>The <code>scratch/</code> folder is for temporary,
+                large files generated during computations. You can also
+                store source code here. ⚠️ Files may be
+                auto-deleted—check the <a
+                href="https://docs.alliancecan.ca/wiki/Scratch_purging_policy">scratch
+                purging policy</a>.</li>
+                <li>🌐 Use the <code>quota</code> command to check your
+                disk space usage.</li>
+                </ul></li>
+                </ul></li>
+                <li><strong>Manage Software Your Job Needs (on the
+                HPC):</strong>
+                <ul>
+                <li><strong>Modules (Easiest):</strong> Many common
+                software packages are pre-installed on the HPC. You load
+                them using the <code>module</code> system inside your
+                job script or in your HPC terminal.
+                <ul>
+                <li>🌐 <strong>On the HPC cluster (or in your job
+                script):</strong>
+                <ul>
+                <li><code>module avail &lt;software_name&gt;</code>
+                (e.g., <code>module avail python</code>) to search for
+                available python versions.</li>
+                <li><code>module load &lt;module_name_and_version&gt;</code>
+                (e.g., <code>module load python/3.10</code>) to make it
+                usable.</li>
+                </ul></li>
+                </ul></li>
+                <li><strong>Python Virtual Environments
+                (<code>venv</code>):</strong> This is highly recommended
+                for Python projects. It creates an isolated environment
+                for your Python packages on the HPC.
+                <ul>
+                <li>You’ll usually create and activate this inside your
+                job script (as shown in the example), often in the
+                temporary <code>$SLURM_TMPDIR</code> for better
+                performance. Then use <code>pip install</code> to add
+                packages.</li>
+                <li>Using <code>--no-index</code> with <code>pip</code>
+                is good practice on clusters if pre-downloaded package
+                files (“wheels”) are provided, as it avoids unnecessary
+                internet access.</li>
+                </ul></li>
+                <li><strong>Apptainer (Formerly Singularity):</strong>
+                For more complex software needs, or if you want to
+                ensure your software environment is exactly the same
+                every time (reproducibility), Apptainer containers are a
+                good choice.
+                <ul>
+                <li>You build a container image (a <code>.sif</code>
+                file) on your <strong>local computer</strong> (often
+                from a Dockerfile).</li>
+                <li>💻 <strong>On your local computer:</strong> <a
+                href="https://apptainer.org/docs/admin/main/installation.html#install-ubuntu-packages">Install
+                Apptainer</a> and <a
+                href="https://docs.alliancecan.ca/wiki/Apptainer#Creating_an_Apptainer_container_from_a_Dockerfile">Create
+                container from Dockerfile</a>.</li>
+                <li>💻 <strong>On your local computer:</strong> Transfer
+                the <code>.sif</code> file to the HPC using
+                <code>scp</code> or <code>rsync</code>.</li>
+                <li>🌐 <strong>On the HPC cluster (in your job
+                script):</strong> Run your program inside the container.
+                <a
+                href="https://docs.alliancecan.ca/wiki/Apptainer#Running_programs_within_a_container">Running
+                programs in a container</a>.</li>
+                </ul></li>
+                </ul></li>
+                <li><strong>Submit Your Job to SLURM (on the
+                HPC):</strong>
+                <ul>
+                <li>Make sure you are logged into the HPC cluster via
+                SSH (in your HPC terminal window).</li>
+                <li>Use <code>cd</code> to navigate to the directory on
+                the HPC where you put your job script (<code>.sh</code>
+                or <code>.sub</code> file).</li>
+                <li>Submit it!
+                <ul>
+                <li><p>🌐 <strong>On the HPC cluster:</strong></p>
+                <div class="sourceCode" id="cb8"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> your_job_script.sh</span></code></pre></div></li>
+                </ul></li>
+                <li>If successful, SLURM will reply with a Job ID number
+                (e.g., <code>Submitted batch job 1234567</code>). Keep
+                this ID handy!</li>
+                <li><strong>Submitting Many Similar Jobs:</strong> If
+                you have lots of job scripts (e.g.,
+                <code>job1.sh</code>, <code>job2.sh</code>, …) on the
+                HPC, you can submit them all carefully.
+                <ul>
+                <li><p>🌐 <strong>On the HPC cluster (be very sure this
+                targets ONLY your job scripts):</strong></p>
+                <div class="sourceCode" id="cb9"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This finds all files ending in .sh in the current HPC directory and runs sbatch on them</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-maxdepth</span> 1 <span class="at">-name</span> <span class="st">&quot;*.sh&quot;</span> <span class="at">-exec</span> sbatch {} <span class="dt">\;</span></span></code></pre></div></li>
+                </ul></li>
+                </ul></li>
+                </ol>
+                <h2
+                id="iii.-checking-on-your-job-and-getting-results">III.
+                Checking on Your Job and Getting Results</h2>
+                <p>Once submitted, your job will wait in a queue until
+                resources are available, then it will run on the
+                HPC.</p>
+                <ol start="10" type="1">
+                <li><strong>Monitor Your Jobs (on the HPC):</strong>
+                <ul>
+                <li>🌐 <strong>On the HPC cluster (use these commands in
+                your HPC terminal):</strong>
+                <ul>
+                <li><code>squeue -u &lt;your_username&gt;</code>: Shows
+                your jobs currently running (<code>R</code>) or pending
+                (<code>PD</code> - waiting in the queue).
+                <ul>
+                <li>Many people create an alias like <code>sq</code> for
+                <code>squeue -u &lt;your_username&gt;</code> for quick
+                checks.</li>
+                </ul></li>
+                <li><code>scancel &lt;Job_ID&gt;</code>: Stops/cancels
+                one of your jobs (if it’s running or pending).</li>
+                <li><code>seff &lt;Job_ID&gt;</code>: For a
+                <em>completed</em> job, shows how efficiently it used
+                CPU and memory. This is very helpful for adjusting your
+                <code>#SBATCH</code> resource requests for future
+                jobs!</li>
+                <li><code>sacct -j &lt;Job_ID&gt; --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,AllocCPUS</code>:
+                Shows detailed accounting info for a job.</li>
+                <li><code>quota</code>: Check your disk space usage on
+                the HPC.</li>
+                </ul></li>
+                </ul></li>
+                <li><strong>Retrieve Your Job’s Results:</strong>
+                <ul>
+                <li>When your job finishes, any output files it created
+                (and the <code>.out</code> and <code>.err</code> files
+                specified in your script) will be in the directories you
+                specified on the HPC.</li>
+                <li>If you have many result files or large ones, it’s
+                good practice to compress them into an archive on the
+                HPC first.
+                <ul>
+                <li><p>🌐 <strong>On the HPC cluster:</strong></p>
+                <div class="sourceCode" id="cb10"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Navigate to the directory ABOVE your results folder on HPC</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># tar -czf &lt;name_of_archive.tar.gz&gt; &lt;directory_to_archive/&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> my_results_archive.tar.gz /path/to/your/results_directory/</span></code></pre></div></li>
+                </ul></li>
+                <li>Now, use <code>scp</code> or <code>rsync</code> from
+                your <strong>local computer’s terminal</strong> to
+                download the files/archives from the HPC to your local
+                machine. Again, use the cluster’s <strong>Data Transfer
+                Node (DTN)</strong> if the files are large.
+                <ul>
+                <li><p>💻 <strong>On your local computer’s
+                terminal:</strong></p>
+                <div class="sourceCode" id="cb11"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scp &lt;username&gt;@&lt;cluster_dtn_or_login_node&gt;:&lt;path_on_HPC_to_file&gt; &lt;local_destination_path&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> your_username@narval-dtn.alliancecan.ca:/path/on/cluster/to/my_results_archive.tar.gz .</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The &quot;.&quot; means download to your current local directory</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Or download a specific output file</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> your_username@narval-dtn.alliancecan.ca:/path/on/cluster/to/output.log ./my_local_results_folder/</span></code></pre></div></li>
+                </ul></li>
+                </ul></li>
+                </ol>
+                <h2 id="iv.-where-to-learn-more">IV. Where to Learn
+                More</h2>
+                <p>This guide covers the basics. As you do more complex
+                work, you’ll want to explore these resources:</p>
+                <ul>
+                <li><strong>Alliance Documentation Wiki:</strong> <a
+                href="https://docs.alliancecan.ca/wiki/">https://docs.alliancecan.ca/wiki/</a>
+                (Your primary source for almost everything!)</li>
+                <li><strong>Running Jobs (More Details):</strong> <a
+                href="https://docs.alliancecan.ca/wiki/Running_jobs">https://docs.alliancecan.ca/wiki/Running_jobs</a></li>
+                <li><strong>SLURM <code>sbatch</code> Options:</strong>
+                <a
+                href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a>
+                (The official, very detailed list of
+                <code>#SBATCH</code> options)</li>
+                <li><strong>Specific Cluster Documentation:</strong>
+                (Links provided in Section I, Step 3)</li>
+                <li><strong>Google and LLMs are Your Friends:</strong>
+                Searching for “Digital Research Alliance Canada
+                <your_topic>” or “Compute Canada <your_topic>” (their
+                older name) often yields helpful results from the wiki
+                or forums.</li>
+                </ul>
+                <p>Good luck, and happy computing!</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Define theme URLs
+        // Theme settings
         const lightThemeUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css';
         const darkThemeUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css';
         const themeLink = document.getElementById('hljs-theme-link');
 
         function setTheme(isDark) {
-            if (isDark) {
-                document.body.classList.add('dark-mode');
-                themeLink.href = darkThemeUrl;
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                themeLink.href = lightThemeUrl;
-                localStorage.setItem('theme', 'light');
+            document.body.classList.toggle('dark-mode', isDark);
+            themeLink.href = isDark ? darkThemeUrl : lightThemeUrl;
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            if (typeof handleScrollActiveSection === 'function') {
+                setTimeout(handleScrollActiveSection, 0);
             }
         }
 
         function toggleTheme() {
-            const isDarkMode = !document.body.classList.contains('dark-mode');
-            setTheme(isDarkMode);
+            setTheme(!document.body.classList.contains('dark-mode'));
         }
 
-        // Initial theme setup on load
-        (function () {
-            let isDarkMode = false; // Default to light
-            const savedTheme = localStorage.getItem('theme');
+        // TOC and Active Section
+        let sectionElements = [];
+        let menuLinks = {};
+        const scrollHighlightOffset = 150; // Pixels from viewport top to consider section active
 
-            if (savedTheme === 'dark') {
-                isDarkMode = true;
-            } else if (savedTheme === 'light') {
-                isDarkMode = false;
-            } else {
-                // No preference saved, check system preference
-                isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        function generateTableOfContents() {
+            const contentSource = document.querySelector('.markdown-body');
+            const menuUl = document.getElementById('menu-links');
+            menuLinks = {};
+
+            if (!contentSource || !menuUl) return;
+            menuUl.innerHTML = '';
+
+            const headings = contentSource.querySelectorAll('h1[id], h2[id], h3[id]');
+            if (headings.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = "No sections found.";
+                li.style.padding = "0.4em 0.6em";
+                menuUl.appendChild(li);
+                return;
             }
-            // Set the initial theme based on detection
-            setTheme(isDarkMode);
 
-            // Initialize highlight.js AFTER potentially setting the theme
-            // It's usually robust enough, but sometimes calling it after ensures styles are applied correctly.
-            // If you load content dynamically, you might need to call hljs.highlightAll() again later.
+            headings.forEach(heading => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = '#' + heading.id;
+                a.textContent = heading.textContent.trim();
+
+                const level = heading.tagName.substring(1);
+                li.classList.add('toc-level-' + level);
+
+                li.appendChild(a);
+                menuUl.appendChild(li);
+                menuLinks[heading.id] = a;
+            });
+        }
+
+        function initActiveSectionHighlighting() {
+            const contentSource = document.querySelector('.markdown-body');
+            if (!contentSource) return;
+
+            sectionElements = Array.from(contentSource.querySelectorAll('h1[id], h2[id], h3[id]'))
+                .sort((a, b) => a.offsetTop - b.offsetTop);
+
+            if (sectionElements.length > 0 && Object.keys(menuLinks).length > 0) {
+                window.addEventListener('scroll', handleScrollActiveSection, { passive: true });
+                handleScrollActiveSection(); // Initial check
+            }
+        }
+
+        function handleScrollActiveSection() {
+            if (sectionElements.length === 0 || Object.keys(menuLinks).length === 0) return;
+
+            let currentSectionId = '';
+            const scrollY = window.scrollY; // Use window.scrollY for consistency
+
+            for (const section of sectionElements) {
+                if (section.offsetTop <= scrollY + scrollHighlightOffset) {
+                    currentSectionId = section.id;
+                } else {
+                    break;
+                }
+            }
+
+            // Fallback if no section is above offset (e.g. top of page)
+            if (!currentSectionId && sectionElements.length > 0) {
+                // Check if first section is reasonably visible near top of viewport
+                const firstSectionTop = sectionElements[0].getBoundingClientRect().top;
+                if (firstSectionTop >= 0 && firstSectionTop < window.innerHeight * 0.75) {
+                    currentSectionId = sectionElements[0].id;
+                }
+            }
+
+            // At the very bottom of the page
+            if ((window.innerHeight + Math.ceil(scrollY)) >= document.body.scrollHeight - 5) {
+                if (sectionElements.length > 0) {
+                    currentSectionId = sectionElements[sectionElements.length - 1].id;
+                }
+            }
+
+            Object.values(menuLinks).forEach(link => link.classList.remove('active'));
+            if (currentSectionId && menuLinks[currentSectionId]) {
+                menuLinks[currentSectionId].classList.add('active');
+            }
+        }
+
+        // Initial setup
+        (function () {
+            let isDarkMode = localStorage.getItem('theme') === 'dark' ||
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            setTheme(isDarkMode);
             hljs.highlightAll();
+            generateTableOfContents();
+            initActiveSectionHighlighting();
         })();
     </script>
 
