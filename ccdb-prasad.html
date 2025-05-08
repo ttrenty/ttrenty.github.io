@@ -553,7 +553,7 @@
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=/path/to/your/project/logs/%x-%j.err   # Where error messages go</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                                        <span class="co"># Make sure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-user=your_email@example.com # Optional: Get emails about your job</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-type=FAIL,</span><span class="re">END</span><span class="co"> # Optional: Email on FAILure or when job ENDs</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-type=FAIL,INVALID_DEPEND,REQUEUE,STAGE_OUT #,</span><span class="re">END</span><span class="co"> # Send email on job failure or other events</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job started on </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st"> at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
@@ -581,17 +581,33 @@
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Running my Python script (on HPC) ---&quot;</span></span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with the actual command to run your code</span></span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure to use correct paths to your script and data on the HPC</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> /path/to/your/project/src/my_script.py <span class="at">--input</span> /path/to/data <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.txt&quot;</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> /path/to/your/project/src/my_script.py <span class="at">--input</span> /path/to/data <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.csv&quot;</span></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_EXIT_CODE</span><span class="op">=</span><span class="va">$?</span> <span class="co"># Save the exit code of your script</span></span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Python script finished with exit code </span><span class="va">$SCRIPT_EXIT_CODE</span><span class="st"> (on HPC) ---&quot;</span></span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: If your script created important files in $SLURM_TMPDIR,</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># copy them back to your persistent storage (e.g., /project or /home) on the HPC</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.txt&quot;</span> /path/to/your/project/results/my_job_results.txt</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co"># If your script created important files in $SLURM_TMPDIR,</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># copy them back to your persistent storage (e.g., project or home) on the HPC</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co"># cp &quot;$SLURM_TMPDIR/results.csv&quot; /path/to/your/project/results/my_job_results.txt</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job finished at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$SCRIPT_EXIT_CODE</span> <span class="co"># Important: Exit with your script&#39;s exit code</span></span></code></pre></div></li>
+                </ol>
+                <p><strong>Warning:</strong> You cannot use this example
+                job as is. You will need to:</p>
+                <ul>
+                <li>Modify the <code>#SBATCH --output=...</code> and
+                <code>#SBATCH --error=...</code> lines to point to your
+                own HPC directories (use <code>pwd</code> to get the
+                correct path).</li>
+                <li>Modify the
+                <code>python /path/to/your/project/src/my_script.py --input /path/to/data --output "$SLURM_TMPDIR/results.csv"</code>
+                line to use your own Python script and input/output
+                arguments. By default, Python does not use
+                <code>--input</code> and <code>--output</code>
+                arguments.</li>
+                </ul>
+                <ol start="7" type="1">
                 <li><strong>Transfer Your Files to the Cluster:</strong>
                 <ul>
                 <li><p>Get your job script, Python code, and any input
@@ -602,9 +618,8 @@
                 <strong>on your local computer’s terminal</strong> (the
                 one you kept for local tasks). You’ll transfer files
                 from your computer to your <strong>home
-                directory</strong> (<code>~</code> or
-                <code>/home/&lt;your_username&gt;</code>) or project
-                directory on the HPC cluster’s login node.</p></li>
+                directory</strong> (<code>~</code>) or project directory
+                on the HPC cluster’s login node.</p></li>
                 <li><p>For very large files, it’s better to use the
                 cluster’s dedicated <strong>Data Transfer Node
                 (DTN)</strong>. Find its hostname in the cluster’s
@@ -818,8 +833,8 @@
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> your_username@narval-dtn.alliancecan.ca:/path/on/cluster/to/my_results_archive.tar.gz .</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The &quot;.&quot; means download to your current local directory</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Or download a specific output file</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> your_username@narval-dtn.alliancecan.ca:/path/on/cluster/to/output.log ./my_local_results_folder/</span></code></pre></div></li>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the archive</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> my_results_archive.tar.gz</span></code></pre></div></li>
                 </ul></li>
                 </ul></li>
                 </ol>
