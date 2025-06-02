@@ -282,6 +282,7 @@
 
         <div class="content-wrapper">
             <div class="markdown-body">
+                <!-- compile with: pandoc CCDB_prasad_Tutorial.md -o CCDB_prasad_Tutorial.html --standalone --template=template.html --metadata title="CCDB Tutorial" -->
                 <h1
                 id="your-guide-to-using-digital-research-alliance-of-canada-hpc-clusters"><strong>Your
                 Guide to Using Digital Research Alliance of Canada HPC
@@ -412,11 +413,16 @@
                 computations must be run as jobs submitted to the
                 scheduler.</p>
                 </blockquote>
-                <p><strong>💻 Local Computer Action / 🌐 HPC Cluster
-                Action Legend:</strong> * <strong>💻 LOCAL:</strong>
-                Commands you run on your personal computer’s terminal. *
-                <strong>🌐 HPC:</strong> Commands you run <em>after</em>
-                you’ve SSH’d into the cluster.</p>
+                <ul>
+                <li><p><strong>💻 Local Computer Action / 🌐 HPC Cluster
+                Action Legend:</strong></p>
+                <ul>
+                <li><p><strong>💻 LOCAL:</strong> Commands you run on
+                your personal computer’s terminal.</p></li>
+                <li><p><strong>🌐 HPC:</strong> Commands you run
+                <em>after</em> you’ve SSH’d into the cluster.</p></li>
+                </ul></li>
+                </ul>
                 <blockquote>
                 <p><strong>💡 TIP: Use Two Terminal Windows for an
                 Easier Workflow</strong></p>
@@ -437,13 +443,14 @@
                 hostname for your chosen cluster (e.g., from links in
                 Step 3). For Narval:
                 <ul>
-                <li>💻 <strong>In one of your local terminal windows
-                (this will become your HPC terminal):</strong>
-                <code>bash     ssh &lt;your_alliance_username&gt;@narval.alliancecan.ca</code>
-                (Replace <code>&lt;your_alliance_username&gt;</code>
-                with your username.)</li>
-                <li>You’ll be prompted for your password and then your
-                Duo 2FA code.</li>
+                <li><p>💻 <strong>In one of your local terminal windows
+                (this will become your HPC terminal):</strong></p>
+                <div class="sourceCode" id="cb1"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>your_alliance_username<span class="op">&gt;</span>@narval.alliancecan.ca</span></code></pre></div>
+                <p>(Replace <code>&lt;your_alliance_username&gt;</code>
+                with your username.)</p></li>
+                <li><p>You’ll be prompted for your password and then
+                your Duo 2FA code.</p></li>
                 </ul></li>
                 <li><strong>Make Logins Easier (Recommended): Set up SSH
                 Keys</strong> SSH keys let you log in without typing
@@ -588,55 +595,55 @@
                 Terminal</strong>) to find absolute paths.</li>
                 </ul>
                 </blockquote>
-                <div class="sourceCode" id="cb1"><pre
-                class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-vikikrpd  # Your group&#39;s allocation (check CCDB for yours)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -N 1                    # Number of nodes (computers) (usually 1)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -n 4                    # Number of CPU cores (processors)</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem-per-cpu=512M      # Memory per CPU core (e.g., 512M, 1G, 4G)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># (Don&#39;t use this specific option on Niagara)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00-00:20:00      # Max runtime (Days-HH:MM:SS) - JOB KILLED AFTER THIS!</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=MyExampleJob # Descriptive job name</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=/path/to/your/project/logs/%x-%j.out  # Standard output file (%x=jobname, %j=jobid)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                                      <span class="co"># Ensure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=/path/to/your/project/logs/%x-%j.err   # Standard error file</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                                                      <span class="co"># Ensure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-user=your_email@example.com # Optional: Email for job status</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-type=FAIL,INVALID_DEPEND,REQUEUE,STAGE_OUT #,</span><span class="re">END</span><span class="co"> # Email events</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job started on </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st"> at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;My working directory on HPC is: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span> <span class="co"># This will be your submission directory</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Setting up software (on HPC) ---&quot;</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.10 <span class="co"># Load pre-installed software</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a temporary, private workspace for this job on the HPC</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># $SLURM_TMPDIR is a special fast, temporary directory for your job on the HPC</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Using it is often faster for installing packages and running code</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ex">virtualenv</span> <span class="at">--no-download</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env&quot;</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env/bin/activate&quot;</span> <span class="co"># Activate virtual environment</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Installing Python packages (if any) (on HPC) ---&quot;</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Using --no-index tells pip not to look online, good if pre-downloaded wheels are available</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># See: https://docs.alliancecan.ca/wiki/Python#Installing_packages_in_a_virtual_environment</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--no-index</span> <span class="at">--upgrade</span> pip</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install numpy <span class="at">--no-index</span> <span class="co"># Example</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co"># For many packages, use a requirements.txt file:</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install --no-index -r /path/to/your/project/requirements.txt # Ensure path is correct on HPC</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Running my Python script (on HPC) ---&quot;</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with your actual command. Ensure paths to script/data are correct on HPC.</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> /path/to/your/project/src/my_script.py <span class="at">--input</span> /path/to/data <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.csv&quot;</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_EXIT_CODE</span><span class="op">=</span><span class="va">$?</span> <span class="co"># Save script&#39;s exit code</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Python script finished with exit code </span><span class="va">$SCRIPT_EXIT_CODE</span><span class="st"> (on HPC) ---&quot;</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co"># If your script created important files in $SLURM_TMPDIR, copy them back to persistent storage</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co"># cp &quot;$SLURM_TMPDIR/results.csv&quot; /path/to/your/project/results/my_job_results.csv</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job finished at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$SCRIPT_EXIT_CODE</span> <span class="co"># Important: Exit with your script&#39;s exit code</span></span></code></pre></div>
+                <div class="sourceCode" id="cb2"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-vikikrpd  # Your group&#39;s allocation (check CCDB for yours)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -N 1                    # Number of nodes (computers) (usually 1)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -n 4                    # Number of CPU cores (processors)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem-per-cpu=512M      # Memory per CPU core (e.g., 512M, 1G, 4G)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># (Don&#39;t use this specific option on Niagara)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00-00:20:00      # Max runtime (Days-HH:MM:SS) - JOB KILLED AFTER THIS!</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=MyExampleJob # Descriptive job name</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=/path/to/your/project/logs/%x-%j.out  # Standard output file (%x=jobname, %j=jobid)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                                      <span class="co"># Ensure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=/path/to/your/project/logs/%x-%j.err   # Standard error file</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                                      <span class="co"># Ensure &#39;/path/to/your/project/logs&#39; exists on HPC!</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-user=your_email@example.com # Optional: Email for job status</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mail-type=FAIL,INVALID_DEPEND,REQUEUE,STAGE_OUT #,</span><span class="re">END</span><span class="co"> # Email events</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job started on </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st"> at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;My working directory on HPC is: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span> <span class="co"># This will be your submission directory</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Setting up software (on HPC) ---&quot;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.10 <span class="co"># Load pre-installed software</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a temporary, private workspace for this job on the HPC</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># $SLURM_TMPDIR is a special fast, temporary directory for your job on the HPC</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Using it is often faster for installing packages and running code</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ex">virtualenv</span> <span class="at">--no-download</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env&quot;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/env/bin/activate&quot;</span> <span class="co"># Activate virtual environment</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Installing Python packages (if any) (on HPC) ---&quot;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Using --no-index tells pip not to look online, good if pre-downloaded wheels are available</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># See: https://docs.alliancecan.ca/wiki/Python#Installing_packages_in_a_virtual_environment</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--no-index</span> <span class="at">--upgrade</span> pip</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install numpy <span class="at">--no-index</span> <span class="co"># Example</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co"># For many packages, use a requirements.txt file:</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install --no-index -r /path/to/your/project/requirements.txt # Ensure path is correct on HPC</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Running my Python script (on HPC) ---&quot;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with your actual command. Ensure paths to script/data are correct on HPC.</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> /path/to/your/project/src/my_script.py <span class="at">--input</span> /path/to/data <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$SLURM_TMPDIR</span><span class="st">/results.csv&quot;</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_EXIT_CODE</span><span class="op">=</span><span class="va">$?</span> <span class="co"># Save script&#39;s exit code</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;--- Python script finished with exit code </span><span class="va">$SCRIPT_EXIT_CODE</span><span class="st"> (on HPC) ---&quot;</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># If your script created important files in $SLURM_TMPDIR, copy them back to persistent storage</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># cp &quot;$SLURM_TMPDIR/results.csv&quot; /path/to/your/project/results/my_job_results.csv</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job finished at: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span> <span class="va">$SCRIPT_EXIT_CODE</span> <span class="co"># Important: Exit with your script&#39;s exit code</span></span></code></pre></div>
                 <blockquote>
                 <p><strong>⚠️ WARNING: Adapt This Example
                 Script!</strong></p>
@@ -677,16 +684,19 @@
                 <ul>
                 <li><p><strong>Using <code>scp</code> (💻
                 LOCAL):</strong></p>
-                <div class="sourceCode" id="cb2"><pre
-                class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a single file (e.g., your job script)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># scp &lt;local_file_path&gt; &lt;username&gt;@&lt;cluster_login_or_dtn&gt;:&lt;path_on_HPC&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> my_job.sh your_username@narval.alliancecan.ca:~/my_project/</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a whole directory recursively (-r)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> local_code_folder your_username@narval.alliancecan.ca:~/my_project/</span></code></pre></div></li>
+                <div class="sourceCode" id="cb3"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a single file (e.g., your job script)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># scp &lt;local_file_path&gt; &lt;username&gt;@&lt;cluster_login_or_dtn&gt;:&lt;path_on_HPC&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> my_job.sh your_username@narval.alliancecan.ca:~/my_project/</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a whole directory recursively (-r)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> local_code_folder your_username@narval.alliancecan.ca:~/my_project/</span></code></pre></div></li>
                 <li><p><strong>Using <code>rsync</code> (often better
-                for directories) (💻 LOCAL):</strong>
-                <code>bash     # rsync -avz &lt;local_directory/&gt; &lt;username&gt;@&lt;cluster_login_or_dtn&gt;:&lt;path_on_HPC_directory/&gt;     # Trailing slashes are important!     rsync -avz --exclude='__pycache__/' --exclude='*.tmp' local_code_folder/ your_username@narval.alliancecan.ca:~/my_project/code_folder/</code></p></li>
+                for directories) (💻 LOCAL):</strong></p>
+                <div class="sourceCode" id="cb4"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rsync -avz &lt;local_directory/&gt; &lt;username&gt;@&lt;cluster_login_or_dtn&gt;:&lt;path_on_HPC_directory/&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Trailing slashes are important!</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;__pycache__/&#39;</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">&#39;*.tmp&#39;</span> local_code_folder/ your_username@narval.alliancecan.ca:~/my_project/code_folder/</span></code></pre></div></li>
                 </ul></li>
                 </ul>
                 <blockquote>
@@ -697,13 +707,17 @@
                 transfer the single archive, then uncompress it on the
                 cluster.</p>
                 <ol type="1">
-                <li><strong>Create archive (💻 LOCAL):</strong>
-                <code>bash     tar -czf project_archive.tar.gz local_directory_to_compress/</code></li>
-                <li><strong>Transfer archive (💻 LOCAL):</strong>
-                <code>bash     scp project_archive.tar.gz your_username@narval.alliancecan.ca:~/</code></li>
-                <li><strong>Decompress archive (🌐 HPC - after SSHing
-                in):</strong>
-                <code>bash     cd ~  # Navigate to where you put the archive on HPC     tar -xzf project_archive.tar.gz</code></li>
+                <li><p><strong>Create archive (💻 LOCAL):</strong></p>
+                <div class="sourceCode" id="cb5"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> project_archive.tar.gz local_directory_to_compress/</span></code></pre></div></li>
+                <li><p><strong>Transfer archive (💻 LOCAL):</strong></p>
+                <div class="sourceCode" id="cb6"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> project_archive.tar.gz your_username@narval.alliancecan.ca:~/</span></code></pre></div></li>
+                <li><p><strong>Decompress archive (🌐 HPC - after SSHing
+                in):</strong></p>
+                <div class="sourceCode" id="cb7"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~  <span class="co"># Navigate to where you put the archive on HPC</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> project_archive.tar.gz</span></code></pre></div></li>
                 </ol>
                 </blockquote>
                 <blockquote>
@@ -821,19 +835,21 @@
                 <li><strong>Submit the job:</strong>
                 <ul>
                 <li>🌐 <strong>On the HPC cluster:</strong>
-                <code>bash     sbatch your_job_script.sh</code></li>
+                <code>sbatch your_job_script.sh</code></li>
                 <li>SLURM will reply with a Job ID (e.g.,
                 <code>Submitted batch job 1234567</code>). <strong>Note
                 this ID!</strong></li>
                 </ul></li>
                 <li><strong>Submitting Many Similar Jobs:</strong>
                 <ul>
-                <li>If you have multiple job scripts (e.g.,
+                <li><p>If you have multiple job scripts (e.g.,
                 <code>job1.sh</code>, <code>job2.sh</code>, …) on the
-                HPC:</li>
-                <li>🌐 <strong>On the HPC cluster (CAREFUL: ensure this
-                targets ONLY your job scripts):</strong>
-                <code>bash     # Finds all .sh files in current HPC directory and runs sbatch on them     find . -maxdepth 1 -name "*.sh" -exec sbatch {} \;</code></li>
+                HPC:</p></li>
+                <li><p>🌐 <strong>On the HPC cluster (CAREFUL: ensure
+                this targets ONLY your job scripts):</strong></p>
+                <div class="sourceCode" id="cb8"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finds all .sh files in current HPC directory and runs sbatch on them</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-maxdepth</span> 1 <span class="at">-name</span> <span class="st">&quot;*.sh&quot;</span> <span class="at">-exec</span> sbatch {} <span class="dt">\;</span></span></code></pre></div></li>
                 </ul></li>
                 </ul>
                 <hr />
@@ -872,8 +888,11 @@
                 <li><strong>Compress results before download if
                 large/many:</strong>
                 <ul>
-                <li>🌐 <strong>On the HPC cluster:</strong>
-                <code>bash     # Navigate to the directory ABOVE your results folder on HPC     # tar -czf &lt;name_of_archive.tar.gz&gt; &lt;directory_to_archive/&gt;     tar -czf my_results_archive.tar.gz /path/to/your/results_directory/</code></li>
+                <li><p>🌐 <strong>On the HPC cluster:</strong></p>
+                <div class="sourceCode" id="cb9"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Navigate to the directory ABOVE your results folder on HPC</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># tar -czf &lt;name_of_archive.tar.gz&gt; &lt;directory_to_archive/&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> my_results_archive.tar.gz /path/to/your/results_directory/</span></code></pre></div></li>
                 </ul></li>
                 <li><strong>Download files/archives (💻 LOCAL computer’s
                 terminal):</strong>
@@ -883,13 +902,13 @@
                 files.</p></li>
                 <li><p>💻 <strong>On your local computer’s
                 terminal:</strong></p>
-                <div class="sourceCode" id="cb3"><pre
-                class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scp &lt;username&gt;@&lt;cluster_dtn_or_login_node&gt;:&lt;path_on_HPC_to_file&gt; &lt;local_destination_path&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> your_username@narval-dtn.alliancecan.ca:/path/on/cluster/to/my_results_archive.tar.gz .</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The &quot;.&quot; means download to your current local directory</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If archived, extract locally:</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> my_results_archive.tar.gz</span></code></pre></div></li>
+                <div class="sourceCode" id="cb10"><pre
+                class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scp &lt;username&gt;@&lt;cluster_dtn_or_login_node&gt;:&lt;path_on_HPC_to_file&gt; &lt;local_destination_path&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> your_username@narval-dtn.alliancecan.ca:/path/on/cluster/to/my_results_archive.tar.gz .</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The &quot;.&quot; means download to your current local directory</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If archived, extract locally:</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> my_results_archive.tar.gz</span></code></pre></div></li>
                 </ul></li>
                 </ul>
                 <hr />
