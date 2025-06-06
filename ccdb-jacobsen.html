@@ -336,15 +336,14 @@
                 <ul>
                 <li>Go to the <a
                 href="https://ccdb.alliancecan.ca/account_application">account
-                application page</a>.</li>
-                <li>Use your <strong>University of Calgary</strong> or
-                <strong>University of Toronto email address</strong>
-                (e.g., <code>your.name@ucalgary.ca</code> or
-                <code>your.name@mail.utoronto.ca</code>).</li>
-                <li>In the ‘Sponsor’ field, enter the PI code Viki
-                provided: <code>vdr-502-05</code>.
-                <!-- *   In the 'Sponsor' field, enter the PI code Viki provided: `pir-600-01`. --></li>
-                <li>Viki will approve your application, then Alliance
+                application page</a>.
+                <!-- *   Use your **University of Calgary** or **University of Toronto email address** (e.g., `your.name@ucalgary.ca` or `your.name@mail.utoronto.ca`). --></li>
+                <li>Use your <strong>University of Toronto email
+                address</strong>.
+                <!-- *   In the 'Sponsor' field, enter the PI code Viki provided: `vdr-502-05`. --></li>
+                <li>In the ‘Sponsor’ field, enter the PI code Arno
+                provided: <code>pir-600-01</code>.</li>
+                <li>Arno will approve your application, then Alliance
                 staff will validate it. You’ll receive emails updating
                 you on the status.</li>
                 </ul>
@@ -383,14 +382,16 @@
                 href="https://ccdb.alliancecan.ca/services/opt_in">here</a>
                 if needed. Niagara offers a user-friendly web portal:
                 ‘<a
-                href="https://ondemand.scinet.utoronto.ca/pun/sys/dashboard/">OnDemand</a>’.</li>
-                <li><strong>Nibi (Priority Access):</strong> When it
-                will become available (2025-07-07), you might use the
-                <code>rrg-vikikrpd</code> account in your job script
-                (see after) on the new <a
+                href="https://ondemand.scinet.utoronto.ca/pun/sys/dashboard/">OnDemand</a>’.
+                <!-- *   **Nibi (Priority Access):** When it will become available (2025-07-07), you might use the `rrg-vikikrpd` account in your job script (see after) on the new [Nibi](https://docs.alliancecan.ca/wiki/Nibi) cluster for priority access. --></li>
+                <li><strong>Nibi and Rorqual (Priority Access):</strong>
+                When it will become available (2025-07-07), you might
+                use the <code>rrg-jacobsen-ab</code> account in your job
+                script (see after) on the new <a
                 href="https://docs.alliancecan.ca/wiki/Nibi">Nibi</a>
-                cluster for priority access.
-                <!-- *   **Nibi and Rorqual (Priority Access):** When it will become available (2025-07-07), you might use the `rrg-jacobsen-ab` account in your job script (see after) on the new [Nibi](https://docs.alliancecan.ca/wiki/Nibi) and [Rorqual](https://docs.alliancecan.ca/wiki/Rorqual) clusters for priority access. --></li>
+                and <a
+                href="https://docs.alliancecan.ca/wiki/Rorqual">Rorqual</a>
+                clusters for priority access.</li>
                 <li><strong>Retired (Do Not Use):</strong> <a
                 href="https://docs.alliancecan.ca/wiki/Graham">Graham</a>
                 is being shut down.</li>
@@ -606,7 +607,7 @@
                 </blockquote>
                 <div class="sourceCode" id="cb2"><pre
                 class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-vikikrpd  # The group&#39;s allocation</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=def-jacobsen  # The group&#39;s allocation</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -N 1                    # Number of nodes (computers) (usually 1)</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -n 4                    # Number of CPU cores (processors)</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem-per-cpu=512M      # Memory per CPU core (e.g., 512M, 1G, 4G)</span></span>
